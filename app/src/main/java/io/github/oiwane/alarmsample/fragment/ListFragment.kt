@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ListView
 import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
+import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -29,8 +30,10 @@ class ListFragment : Fragment() {
 
         val alarmListView: ListView = view.findViewById(R.id.alarmListView)
         val list = ArrayList<String>()
-        for (i in 1..10)
-            list.add(i.toString())
+        val propertyList = JsonFileManager(requireContext()).load() as ArrayList
+        for (property in propertyList) {
+            list.add(property.title)
+        }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
         alarmListView.adapter = adapter
     }
