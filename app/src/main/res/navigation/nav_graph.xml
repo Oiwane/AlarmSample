@@ -3,26 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/ListFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/ListFragment"
         android:name="io.github.oiwane.alarmsample.fragment.ListFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/list_fragment">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
+        tools:layout="@layout/list_fragment"/>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/EditFragment"
         android:name="io.github.oiwane.alarmsample.fragment.EditFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/edit_fragment">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        tools:layout="@layout/edit_fragment"/>
 </navigation>
