@@ -1,24 +1,19 @@
 package io.github.oiwane.alarmsample.data
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
 class AlarmProperty{
-    private var id: String = UUID.randomUUID().toString()
-        get
-    private var title: String
-        get
-    private var hour: Int
-        get
-    private var minute: Int
-        get
-    private var hasSnoozed: Boolean
-        get
-    private var snoozeTime: Int
-        get
-    private var hasRepeated: Boolean
-        get
-    private var dow: DayOfWeek
-        get
+    @JsonProperty var id: String = UUID.randomUUID().toString()
+    @JsonProperty var title: String
+    @JsonProperty var hour: Int
+    @JsonProperty var minute: Int
+    @JsonProperty var hasSnoozed: Boolean
+    @JsonProperty var snoozeTime: Int
+    @JsonProperty var hasRepeated: Boolean
+    @JsonProperty var dow: DayOfWeek
+
+    constructor(): this("", 0, 0, false, 0, false, DayOfWeek.DEFAULT)
 
     constructor(id: String,
                 title: String,
@@ -66,28 +61,15 @@ class AlarmProperty{
 }
 
 class DayOfWeek(
-    sun: Boolean,
-    mon: Boolean,
-    tue: Boolean,
-    wed: Boolean,
-    thu: Boolean,
-    fri: Boolean,
-    sat: Boolean
+    @JsonProperty var sun: Boolean,
+    @JsonProperty var mon: Boolean,
+    @JsonProperty var tue: Boolean,
+    @JsonProperty var wed: Boolean,
+    @JsonProperty var thu: Boolean,
+    @JsonProperty var fri: Boolean,
+    @JsonProperty var sat: Boolean
 ) {
-    private var sun: Boolean = sun
-        get
-    private var mon: Boolean = mon
-        get
-    private var tue: Boolean = tue
-        get
-    private var wed: Boolean = wed
-        get
-    private var thu: Boolean = thu
-        get
-    private var fri: Boolean = fri
-        get
-    private var sat: Boolean = sat
-        get
+    constructor(): this(false, false, false, false, false, false, false)
 
     companion object {
         val DEFAULT = DayOfWeek(false, false, false, false, false, false, false)
