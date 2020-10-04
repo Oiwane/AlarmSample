@@ -20,6 +20,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -44,4 +47,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    androidTestImplementation "com.android.support.test:runner:$version"
+    androidTestImplementation "com.android.support.test:rules:$version"
+    androidTestImplementation "com.android.support:support-annotations:$version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$version"
 }
