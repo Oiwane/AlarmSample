@@ -2,10 +2,23 @@
     <string name="app_name">AlarmSample</string>
     <string name="action_settings">Settings</string>
 
-    <string name="alarm_name">アラーム名</string>
-    <string name="hint_alarm_name">アラーム名を入力してください</string>
+    <string name="alarm_name_text">アラーム名</string>
+    <string name="alarm_time_text">時刻</string>
+    <string name="time_separate">:</string>
+    <string name="alarm_snooze_text">スヌーズ</string>
+    <string name="alarm_snooze_unit_text">分</string>
+    <string name="alarm_repeat_dow_text">曜日</string>
+    <string name="alarm_dow_sun">日</string>
+    <string name="alarm_dow_mon">月</string>
+    <string name="alarm_dow_tue">火</string>
+    <string name="alarm_dow_wed">水</string>
+    <string name="alarm_dow_thu">木</string>
+    <string name="alarm_dow_fri">金</string>
+    <string name="alarm_dow_sat">土</string>
     <string name="register">登録</string>
     <string name="cancel">キャンセル</string>
+
+    <string name="hint_alarm_name">アラーム名を入力してください</string>
 
     <string name="error_alarm_title_edit_text_empty">
         アラーム名を入力していません
