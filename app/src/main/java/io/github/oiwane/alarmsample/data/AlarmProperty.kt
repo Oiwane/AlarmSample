@@ -5,14 +5,15 @@ import java.util.*
 
 class AlarmProperty{
     @JsonProperty var id: String = UUID.randomUUID().toString()
-    @JsonProperty var title: String
-    @JsonProperty var hour: Int
-    @JsonProperty var minute: Int
-    @JsonProperty var hasSnoozed: Boolean
-    @JsonProperty var snoozeTime: Int
-    @JsonProperty var hasRepeated: Boolean
-    @JsonProperty var dow: DayOfWeek
+    @JsonProperty val title: String
+    @JsonProperty val hour: Int
+    @JsonProperty val minute: Int
+    @JsonProperty val hasSnoozed: Boolean
+    @JsonProperty val snoozeTime: Int
+    @JsonProperty val hasRepeated: Boolean
+    @JsonProperty val dow: DayOfWeek
 
+    // Jsonの例外対策
     constructor(): this("", 0, 0, false, 0, false, DayOfWeek.DEFAULT)
 
     constructor(id: String,
@@ -61,14 +62,15 @@ class AlarmProperty{
 }
 
 class DayOfWeek(
-    @JsonProperty var sun: Boolean,
-    @JsonProperty var mon: Boolean,
-    @JsonProperty var tue: Boolean,
-    @JsonProperty var wed: Boolean,
-    @JsonProperty var thu: Boolean,
-    @JsonProperty var fri: Boolean,
-    @JsonProperty var sat: Boolean
+    @JsonProperty val sun: Boolean,
+    @JsonProperty val mon: Boolean,
+    @JsonProperty val tue: Boolean,
+    @JsonProperty val wed: Boolean,
+    @JsonProperty val thu: Boolean,
+    @JsonProperty val fri: Boolean,
+    @JsonProperty val sat: Boolean
 ) {
+    // Jsonの例外対策
     constructor(): this(false, false, false, false, false, false, false)
 
     companion object {

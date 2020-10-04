@@ -1,6 +1,7 @@
 package io.github.oiwane.alarmsample.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,10 @@ import android.widget.Button
 import android.widget.ListView
 import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
+import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
+import io.github.oiwane.alarmsample.message.ErrorMessageToast
+import java.io.FileNotFoundException
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -30,10 +34,23 @@ class ListFragment : Fragment() {
 
         val alarmListView: ListView = view.findViewById(R.id.alarmListView)
         val list = ArrayList<String>()
-        val propertyList = JsonFileManager(requireContext()).load() as ArrayList
-        for (property in propertyList) {
-            list.add(property.title)
+        val propertyList: List<AlarmProperty>?
+        try {
+            propertyList = JsonFileManager(requireContext()).load()
+
+            // ファイルの読み込みができなかった場合
+            if (propertyList == null) {
+                ErrorMessageToast(requireContext()).showErrorMessage(R.string.error_failed_load_file)
+                return
+            }
+        } catch (e: FileNotFoundException) {
+            Log.e("JsonFileManager", "not found file.")
+            ErrorMessageToast(requireContext()).showErrorMessage(R.string.error_failed_not_found_file)
+            return
         }
+
+        for (property in propertyList)
+            list.add(property.title)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
         alarmListView.adapter = adapter
     }

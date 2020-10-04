@@ -7,7 +7,7 @@
     tools:context=".fragment.EditFragment">
 
     <EditText
-        android:id="@+id/AlarmTitleEditText"
+        android:id="@+id/alarmEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="45dp"
-        android:text="@string/alarm_name"
+        android:text="@string/alarm_name_text"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -38,23 +38,239 @@
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="80dp"
         android:text="@string/register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cancelButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AlarmTitleEditText"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="80dp"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/registerButton"
-        app:layout_constraintTop_toBottomOf="@+id/AlarmTitleEditText"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
         app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/alarm_time_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alarmEditText" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+        <Spinner
+            android:id="@+id/hourSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:spinnerMode="dialog" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time_separate"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/minuteSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/snoozeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/alarm_snooze_text"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/repeatSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/alarm_repeat_dow_text"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/snoozeSpinner" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repeatSwitch">
+
+        <io.github.oiwane.alarmsample.widget.layout.SquareLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:id="@+id/sunToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_dow_sun"
+                android:textOff="@string/alarm_dow_sun"
+                android:textOn="@string/alarm_dow_sun"
+                android:textSize="18sp" />
+        </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
+
+        <io.github.oiwane.alarmsample.widget.layout.SquareLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:id="@+id/monToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_dow_mon"
+                android:textOff="@string/alarm_dow_mon"
+                android:textOn="@string/alarm_dow_mon"
+                android:textSize="18sp" />
+        </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
+
+        <io.github.oiwane.alarmsample.widget.layout.SquareLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:id="@+id/tueToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_dow_tue"
+                android:textOff="@string/alarm_dow_tue"
+                android:textOn="@string/alarm_dow_tue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="18sp" />
+        </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
+
+        <io.github.oiwane.alarmsample.widget.layout.SquareLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:id="@+id/wedToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_dow_wed"
+                android:textOff="@string/alarm_dow_wed"
+                android:textOn="@string/alarm_dow_wed"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="18sp" />
+        </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
+
+        <io.github.oiwane.alarmsample.widget.layout.SquareLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:id="@+id/thuToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_dow_thu"
+                android:textOff="@string/alarm_dow_thu"
+                android:textOn="@string/alarm_dow_thu"
+                android:textSize="18sp" />
+        </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
+
+        <io.github.oiwane.alarmsample.widget.layout.SquareLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:id="@+id/friToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_dow_fri"
+                android:textOff="@string/alarm_dow_fri"
+                android:textOn="@string/alarm_dow_fri"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="18sp" />
+        </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
+
+        <io.github.oiwane.alarmsample.widget.layout.SquareLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:id="@+id/satToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_dow_sat"
+                android:textOff="@string/alarm_dow_sat"
+                android:textOn="@string/alarm_dow_sat"
+                android:textSize="18sp" />
+        </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
+
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/snoozeSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/snoozeSwitch" />
 </androidx.constraintlayout.widget.ConstraintLayout>
