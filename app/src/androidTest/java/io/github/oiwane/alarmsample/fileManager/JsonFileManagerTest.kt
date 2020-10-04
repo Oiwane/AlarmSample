@@ -6,17 +6,17 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.data.DayOfWeek
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.runner.RunWith
 import java.io.File
+import java.io.FileNotFoundException
 
 @RunWith(AndroidJUnit4::class)
 class JsonFileManagerTest {
     private lateinit var file: File
-    private val initPropertyStr: String = "" +
+    private val initPropertyStr: String =
             "[{" +
             "\"dow\":{" +
                 "\"sun\":false," +
@@ -57,7 +57,8 @@ class JsonFileManagerTest {
         )
         propertyList.add(alarmProperty)
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        JsonFileManager(context).write(propertyList)
+        val flag = JsonFileManager(context).write(propertyList)
+        assertTrue(flag)
         val expected = jacksonObjectMapper().writeValueAsString(propertyList)
         val actual = file.readText()
         assertEquals(expected, actual)
@@ -72,10 +73,32 @@ class JsonFileManagerTest {
         )
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val actual = JsonFileManager(context).load()
+        assertNotNull(actual)
 
-        assertEquals(expected.size, actual.size)
+        assertEquals(expected.size, actual!!.size)
         for (i in expected.indices)
             assertEquals(expected.toString(), actual.toString())
     }
+
+    @Test
+    fun loadMismatch() {
+        file.writer().use {
+            it.write("")
+        }
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val actual = JsonFileManager(context).load()
+        assertNull(actual)
+    }
+
+    @Test
+    fun loadNotFoundFile() {
+        file.delete()
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        try {
+            JsonFileManager(context).load()
+            assertTrue(false)
+        } catch (e: FileNotFoundException) {
+            assertTrue(true)
+        }
+    }
 }
-// ,{"title":"alarm1","hour":0,"minute":0,"hasSetSnooze":false,"snoozeTime":0,"hasRepeated":false,"dow":{"sun":false,"mon":false,"tue":false,"wed":false,"thu":false,"fri":false,"sat":false},"id":"2aff6ac5-43ce-4efe-983d-4954149e21dc"},{"title":"alarm2","hour":0,"minute":0,"hasSetSnooze":false,"snoozeTime":0,"hasRepeated":false,"dow":{"sun":false,"mon":false,"tue":false,"wed":false,"thu":false,"fri":false,"sat":false},"id":"bf9630bf-a29e-40b1-9ad8-47056597a604"}
