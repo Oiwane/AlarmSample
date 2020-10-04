@@ -2,6 +2,7 @@
     <string name="app_name">AlarmSample</string>
     <string name="action_settings">Settings</string>
 
+    <!-- アラームの追加画面 -->
     <string name="alarm_name_text">アラーム名</string>
     <string name="alarm_time_text">時刻</string>
     <string name="time_separate">:</string>
@@ -20,7 +21,9 @@
 
     <string name="hint_alarm_name">アラーム名を入力してください</string>
 
-    <string name="error_alarm_title_edit_text_empty">
-        アラーム名を入力していません
-    </string>
+    <!-- エラー文 -->
+    <string name="error_edit_text_empty">アラーム名を入力していません</string>
+    <string name="error_failed_load_file">ファイルの読み込みに失敗しました</string>
+    <string name="error_failed_write_file">ファイルの書き込みに失敗しました</string>
+    <string name="error_failed_not_found_file">アラームが登録されていません</string>
 </resources>
