@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
+import io.github.oiwane.alarmsample.data.AlarmList
 import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
@@ -103,7 +104,7 @@ class EditFragment : Fragment() {
                 return@OnClickListener
             }
             val jsonFileManager = JsonFileManager(context)
-            var propertyList: List<AlarmProperty>?
+            var propertyList: AlarmList?
             try {
                 propertyList = jsonFileManager.load()
 
@@ -113,11 +114,11 @@ class EditFragment : Fragment() {
                     return@OnClickListener
                 }
             } catch (e: FileNotFoundException) {
-                propertyList = ArrayList()
+                propertyList = AlarmList()
             }
 
             val property = createPropertyFromInput()
-            (propertyList as ArrayList).add(property)
+            propertyList!!.add(property)
 
             // ファイルの書き込みができなかった場合
             if (!jsonFileManager.write(propertyList)) {

@@ -7,14 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.ListView
-import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.data.AlarmProperty
+import io.github.oiwane.alarmsample.data.AlarmList
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import java.io.FileNotFoundException
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -34,7 +33,7 @@ class ListFragment : Fragment() {
 
         val alarmListView: ListView = view.findViewById(R.id.alarmListView)
         val list = ArrayList<String>()
-        val propertyList: List<AlarmProperty>?
+        val propertyList: AlarmList?
         try {
             propertyList = JsonFileManager(requireContext()).load()
 
