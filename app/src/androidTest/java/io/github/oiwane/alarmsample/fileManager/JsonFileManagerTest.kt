@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.github.oiwane.alarmsample.data.AlarmList
 import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.data.DayOfWeek
 import org.junit.Assert.*
@@ -44,7 +45,7 @@ class JsonFileManagerTest {
 
     @Test
     fun write() {
-        val propertyList = ArrayList<AlarmProperty>()
+        val propertyList = AlarmList()
         val alarmProperty = AlarmProperty(
             "dummy-property",
             "dummy-title",
@@ -53,7 +54,7 @@ class JsonFileManagerTest {
             false,
             0,
             false,
-            DayOfWeek.DEFAULT
+            DayOfWeek()
         )
         propertyList.add(alarmProperty)
         val context = InstrumentationRegistry.getInstrumentation().targetContext
