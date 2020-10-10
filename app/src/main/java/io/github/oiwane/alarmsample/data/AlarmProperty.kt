@@ -14,7 +14,7 @@ class AlarmProperty{
     @JsonProperty val dow: DayOfWeek
 
     // Jsonの例外対策
-    constructor(): this("", 0, 0, false, 0, false, DayOfWeek.DEFAULT)
+    constructor(): this("", 0, 0, false, 0, false, DayOfWeek())
 
     constructor(id: String,
                 title: String,
@@ -45,8 +45,18 @@ class AlarmProperty{
         this.dow = dow
     }
 
-    companion object {
-        val DEFAULT = AlarmProperty("", 0, 0, false, 0, false, DayOfWeek.DEFAULT)
+    fun calcTriggerCalendar(): Calendar {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val now = Calendar.getInstance()
+        now.timeInMillis = System.currentTimeMillis()
+        if (calendar <= now) {
+            calendar.add(Calendar.DATE, 1)
+        }
+        return calendar
     }
 
     override fun toString(): String {
@@ -72,10 +82,6 @@ class DayOfWeek(
 ) {
     // Jsonの例外対策
     constructor(): this(false, false, false, false, false, false, false)
-
-    companion object {
-        val DEFAULT = DayOfWeek(false, false, false, false, false, false, false)
-    }
 
     override fun toString(): String {
         return "[sum: $sun, " +
