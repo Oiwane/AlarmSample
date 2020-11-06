@@ -8,6 +8,9 @@ import android.widget.Toast
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 
+/**
+ * AlarmManagerからの通知を受け取る
+ */
 class AlarmBroadcastReceiver : BroadcastReceiver()
 {
     override fun onReceive(context: Context?, intent: Intent?) {

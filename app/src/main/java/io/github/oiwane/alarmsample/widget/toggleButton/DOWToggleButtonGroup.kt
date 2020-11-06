@@ -5,6 +5,10 @@ import android.widget.ToggleButton
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.data.DayOfWeek
 
+/**
+ * 曜日のトグルボタンを管理するクラス
+ * @param view トグルボタンの親
+ */
 class DOWToggleButtonGroup(view: View) {
     var sunToggleButton: ToggleButton = view.findViewById(R.id.sunToggleButton)
     var monToggleButton: ToggleButton = view.findViewById(R.id.monToggleButton)
@@ -14,6 +18,10 @@ class DOWToggleButtonGroup(view: View) {
     var friToggleButton: ToggleButton = view.findViewById(R.id.friToggleButton)
     var satToggleButton: ToggleButton = view.findViewById(R.id.satToggleButton)
 
+    /**
+     * すべてのトグルボタンの有効/無効を設定する
+     * @param isEnabled 有効か
+     */
     fun setEnabledToAll(isEnabled: Boolean) {
         sunToggleButton.isEnabled = isEnabled
         monToggleButton.isEnabled = isEnabled
@@ -24,6 +32,10 @@ class DOWToggleButtonGroup(view: View) {
         satToggleButton.isEnabled = isEnabled
     }
 
+    /**
+     * 曜日の繰り返し設定を取得する
+     * @return 曜日の繰り返し設定
+     */
     fun getDayOfWeek(): DayOfWeek {
         return DayOfWeek(
             sunToggleButton.isChecked,

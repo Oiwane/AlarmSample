@@ -1,5 +1,6 @@
 package io.github.oiwane.alarmsample.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,7 @@ import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import java.io.FileNotFoundException
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * アラーム一覧を表示する画面
  */
 class ListFragment : Fragment() {
 
@@ -34,21 +35,8 @@ class ListFragment : Fragment() {
 
         val alarmListView: ListView = view.findViewById(R.id.alarmListView)
         val list = ArrayList<String>()
-        val propertyList: AlarmList?
         val context = requireContext()
-        try {
-            propertyList = JsonFileManager(context).load()
-
-            // ファイルの読み込みができなかった場合
-            if (propertyList == null) {
-                ErrorMessageToast(context).showErrorMessage(R.string.error_failed_load_file)
-                return
-            }
-        } catch (e: FileNotFoundException) {
-            Logger.write(LogType.ERROR, "not found file.")
-            ErrorMessageToast(context).showErrorMessage(R.string.error_failed_not_found_file)
-            return
-        }
+        val propertyList: AlarmList = createPropertyList(context) ?: return
 
         val configurator = AlarmConfigurator(requireActivity(), context)
         configurator.resetAllAlarm()
@@ -58,5 +46,26 @@ class ListFragment : Fragment() {
         }
         val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, list)
         alarmListView.adapter = adapter
+    }
+
+    /**
+     * Jsonファイルのアラーム情報をリストにする
+     * @param context コンテキスト
+     * @return アラーム情報リスト
+     */
+    private fun createPropertyList(context: Context): AlarmList?{
+        return try {
+            val propertyList = JsonFileManager(context).load()
+
+            // ファイルの読み込みができなかった場合
+            if (propertyList == null) {
+                ErrorMessageToast(context).showErrorMessage(R.string.error_failed_load_file)
+            }
+            propertyList
+        } catch (e: FileNotFoundException) {
+            Logger.write(LogType.ERROR, context, R.string.message_not_found_file)
+            ErrorMessageToast(context).showErrorMessage(R.string.error_failed_not_found_file)
+            null
+        }
     }
 }
