@@ -26,4 +26,8 @@
     <string name="error_failed_load_file">ファイルの読み込みに失敗しました</string>
     <string name="error_failed_write_file">ファイルの書き込みに失敗しました</string>
     <string name="error_failed_not_found_file">アラームが登録されていません</string>
+
+    <string name="message_not_found_file">not found file</string>
+    <string name="message_convert_failed">convert failed</string>
+    <string name="message_mismatch_property">mismatch property in file</string>
 </resources>

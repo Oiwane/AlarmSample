@@ -11,7 +11,10 @@ import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 
-class AlarmConfigurator(private val activity: Activity, private val context: Context) {
+class AlarmConfigurator(private val activity: Activity, context: Context) {
+
+    private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private val intent = Intent(context, AlarmBroadcastReceiver::class.java)
 
     /**
      * アラームを設定する
@@ -20,9 +23,7 @@ class AlarmConfigurator(private val activity: Activity, private val context: Con
      */
     fun setUpAlarm(property: AlarmProperty, requestCode: Int) {
         Logger.write(LogType.INFO, "alarm target : $property")
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val calendar = property.calcTriggerCalendar()
-        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
         intent.data = Uri.parse(requestCode.toString())
         val pendingIntent = PendingIntent.getBroadcast(
             activity, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
@@ -43,15 +44,23 @@ class AlarmConfigurator(private val activity: Activity, private val context: Con
      */
     fun resetAllAlarm() {
         Logger.write(LogType.INFO, "start")
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
         for (requestCode in 0..9) {
-            intent.data = Uri.parse(requestCode.toString())
-            val pendingIntent = PendingIntent.getBroadcast(
-                activity, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            alarmManager.cancel(pendingIntent)
+            reset(requestCode)
         }
+        Logger.write(LogType.INFO, "end")
+    }
+
+    /**
+     * アラームをリセットする
+     * @param requestCode アラームのコード
+     */
+    fun reset(requestCode: Int) {
+        Logger.write(LogType.INFO, "start")
+        intent.data = Uri.parse(requestCode.toString())
+        val pendingIntent = PendingIntent.getBroadcast(
+            activity, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        alarmManager.cancel(pendingIntent)
         Logger.write(LogType.INFO, "end")
     }
 }

@@ -6,11 +6,14 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.log.LogType
+import io.github.oiwane.alarmsample.log.Logger
 import java.io.File
 import java.io.FileNotFoundException
 
-class JsonFileManager(context: Context) {
+class JsonFileManager(private val context: Context) {
     private val file = File(context.filesDir, "alarm.json")
 
     /**
@@ -38,9 +41,10 @@ class JsonFileManager(context: Context) {
         try {
             return jacksonObjectMapper().readValue(read()) as AlarmList
         } catch (e: UnrecognizedPropertyException) {
+            Logger.write(LogType.ERROR, context, R.string.message_convert_failed)
             Log.e("JsonFileManager", "convert failed.")
         } catch (e: MismatchedInputException) {
-            Log.e("JsonFileManager", "mismatch property in file.")
+            Logger.write(LogType.ERROR, context, R.string.message_mismatch_property)
         }
         return null
     }
