@@ -35,27 +35,28 @@ class ListFragment : Fragment() {
         val alarmListView: ListView = view.findViewById(R.id.alarmListView)
         val list = ArrayList<String>()
         val propertyList: AlarmList?
+        val context = requireContext()
         try {
-            propertyList = JsonFileManager(requireContext()).load()
+            propertyList = JsonFileManager(context).load()
 
             // ファイルの読み込みができなかった場合
             if (propertyList == null) {
-                ErrorMessageToast(requireContext()).showErrorMessage(R.string.error_failed_load_file)
+                ErrorMessageToast(context).showErrorMessage(R.string.error_failed_load_file)
                 return
             }
         } catch (e: FileNotFoundException) {
             Logger.write(LogType.ERROR, "not found file.")
-            ErrorMessageToast(requireContext()).showErrorMessage(R.string.error_failed_not_found_file)
+            ErrorMessageToast(context).showErrorMessage(R.string.error_failed_not_found_file)
             return
         }
 
-        val configurator = AlarmConfigurator(requireActivity(), requireContext())
+        val configurator = AlarmConfigurator(requireActivity(), context)
         configurator.resetAllAlarm()
         for ((index, property) in propertyList.withIndex()) {
             list.add(property.title)
             configurator.setUpAlarm(property, index)
         }
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
+        val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, list)
         alarmListView.adapter = adapter
     }
 }
