@@ -6,20 +6,19 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.github.oiwane.alarmsample.data.AlarmProperty
+import io.github.oiwane.alarmsample.data.AlarmList
 import java.io.File
 import java.io.FileNotFoundException
-import java.lang.Exception
 
 class JsonFileManager(context: Context) {
     private val file = File(context.filesDir, "alarm.json")
 
     /**
      * Jsonファイルにアラーム情報リストを書き込む
-     * @param propertyList 書き込むアラーム情報リスト
+     * @param alarmList 書き込むアラーム情報リスト
      */
-    fun write(propertyList: List<AlarmProperty>): Boolean {
-        val jsonString = jacksonObjectMapper().writeValueAsString(propertyList)
+    fun write(alarmList: AlarmList): Boolean {
+        val jsonString = jacksonObjectMapper().writeValueAsString(alarmList)
         return try {
             file.writer().use {
                 it.write(jsonString)
@@ -35,9 +34,9 @@ class JsonFileManager(context: Context) {
      * @return Jsonファイルから読み込んだアラーム情報リスト。読み取りに失敗した場合、nullを返す。
      * @throws FileNotFoundException ファイルが見つからない（インストール時は必ずファイルが無い）
      */
-    fun load(): List<AlarmProperty>? {
+    fun load(): AlarmList? {
         try {
-            return jacksonObjectMapper().readValue(read()) as ArrayList<AlarmProperty>
+            return jacksonObjectMapper().readValue(read()) as AlarmList
         } catch (e: UnrecognizedPropertyException) {
             Log.e("JsonFileManager", "convert failed.")
         } catch (e: MismatchedInputException) {
