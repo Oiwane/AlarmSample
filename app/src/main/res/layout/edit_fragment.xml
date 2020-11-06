@@ -14,7 +14,7 @@
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:hint="@string/hint_alarm_name"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -38,25 +38,23 @@
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
         android:text="@string/register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cancelButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.7" />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/registerButton"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.7" />
 
     <TextView
         android:id="@+id/textView2"
@@ -189,9 +187,9 @@
                 android:text="@string/alarm_dow_tue"
                 android:textOff="@string/alarm_dow_tue"
                 android:textOn="@string/alarm_dow_tue"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textSize="18sp" />
+                app:layout_constraintTop_toTopOf="parent" />
         </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
 
         <io.github.oiwane.alarmsample.widget.layout.SquareLayout
@@ -207,9 +205,9 @@
                 android:text="@string/alarm_dow_wed"
                 android:textOff="@string/alarm_dow_wed"
                 android:textOn="@string/alarm_dow_wed"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textSize="18sp" />
+                app:layout_constraintTop_toTopOf="parent" />
         </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
 
         <io.github.oiwane.alarmsample.widget.layout.SquareLayout
@@ -241,9 +239,9 @@
                 android:text="@string/alarm_dow_fri"
                 android:textOff="@string/alarm_dow_fri"
                 android:textOn="@string/alarm_dow_fri"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textSize="18sp" />
+                app:layout_constraintTop_toTopOf="parent" />
         </io.github.oiwane.alarmsample.widget.layout.SquareLayout>
 
         <io.github.oiwane.alarmsample.widget.layout.SquareLayout
