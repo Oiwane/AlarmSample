@@ -19,7 +19,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
         val requestCode = Integer.parseInt(intent!!.data.toString())
         Logger.write(LogType.INFO, "requestCode : $requestCode")
         val activity = context!!.applicationContext as Activity
-        AlarmConfigurator(activity, activity).reset(requestCode)
+        AlarmConfigurator(activity, activity).stop(requestCode)
         Logger.write(LogType.INFO, "end")
     }
 }
