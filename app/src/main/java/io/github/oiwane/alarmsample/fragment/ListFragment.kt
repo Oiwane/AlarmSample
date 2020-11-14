@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.listener.AlarmListViewOnItemLongClickListener
 
 /**
  * アラーム一覧を表示する画面
@@ -28,10 +29,12 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val alarmListView: ListView = view.findViewById(R.id.alarmListView)
+        val activity = requireActivity()
         val context = requireContext()
         val propertyList: AlarmList = AlarmConfigurator.createPropertyList(context) ?: return
-        val list = AlarmConfigurator(requireActivity(), context).resetAlarm(propertyList)
-        val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, list)
-        alarmListView.adapter = adapter
+        val list = AlarmConfigurator(activity, context).resetAlarm(propertyList)
+        alarmListView.adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, list)
+        alarmListView.onItemLongClickListener =
+            AlarmListViewOnItemLongClickListener(activity, context)
     }
 }
