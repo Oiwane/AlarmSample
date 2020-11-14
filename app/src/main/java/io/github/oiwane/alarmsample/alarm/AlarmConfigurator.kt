@@ -7,14 +7,43 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import io.github.oiwane.alarmsample.R
+import io.github.oiwane.alarmsample.data.AlarmList
 import io.github.oiwane.alarmsample.data.AlarmProperty
+import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
+import io.github.oiwane.alarmsample.message.ErrorMessageToast
+import java.io.FileNotFoundException
 
 class AlarmConfigurator(private val activity: Activity, context: Context) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val intent = Intent(context, AlarmBroadcastReceiver::class.java)
+
+    /**
+     * アラームをリセットする
+     * @param alarmList アラーム情報リスト
+     * @return アラーム一覧に表示する情報
+     */
+    fun resetAlarm(alarmList: AlarmList): ArrayList<String> {
+        stopAllAlarm()
+        return setUpAllAlarm(alarmList)
+    }
+
+    /**
+     * アラーム情報リストのアラームをセットする
+     * @param alarmList アラーム情報リスト
+     * @return アラーム一覧に表示する情報
+     */
+    private fun setUpAllAlarm(alarmList: AlarmList): ArrayList<String> {
+        val list = ArrayList<String>()
+        for ((index, property) in alarmList.withIndex()) {
+            list.add(property.title)
+            setUpAlarm(property, index)
+        }
+        return list
+    }
 
     /**
      * アラームを設定する
@@ -40,21 +69,21 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
     }
 
     /**
-     * アラームをすべてリセットする
+     * アラームをすべて停止する
      */
-    fun resetAllAlarm() {
+    private fun stopAllAlarm() {
         Logger.write(LogType.INFO, "start")
         for (requestCode in 0..9) {
-            reset(requestCode)
+            stop(requestCode)
         }
         Logger.write(LogType.INFO, "end")
     }
 
     /**
-     * アラームをリセットする
+     * アラームを停止する
      * @param requestCode アラームのコード
      */
-    fun reset(requestCode: Int) {
+    fun stop(requestCode: Int) {
         Logger.write(LogType.INFO, "start")
         intent.data = Uri.parse(requestCode.toString())
         val pendingIntent = PendingIntent.getBroadcast(
@@ -62,5 +91,28 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
         )
         alarmManager.cancel(pendingIntent)
         Logger.write(LogType.INFO, "end")
+    }
+
+    companion object {
+        /**
+         * Jsonファイルのアラーム情報をリストにする
+         * @param context コンテキスト
+         * @return アラーム情報リスト
+         */
+        fun createPropertyList(context: Context): AlarmList?{
+            return try {
+                val propertyList = JsonFileManager(context).load()
+
+                // ファイルの読み込みができなかった場合
+                if (propertyList == null) {
+                    ErrorMessageToast(context).showErrorMessage(R.string.error_failed_load_file)
+                }
+                propertyList
+            } catch (e: FileNotFoundException) {
+                Logger.write(LogType.ERROR, context, R.string.message_not_found_file)
+                ErrorMessageToast(context).showErrorMessage(R.string.error_failed_not_found_file)
+                null
+            }
+        }
     }
 }
