@@ -10,14 +10,16 @@ import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
+import io.github.oiwane.alarmsample.log.LogType
+import io.github.oiwane.alarmsample.log.Logger
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import io.github.oiwane.alarmsample.widget.spinner.SpinnerContentInitializer
 import io.github.oiwane.alarmsample.widget.toggleButton.DOWToggleButtonGroup
-import java.io.FileNotFoundException
 
 /**
  * アラームを追加する画面
@@ -32,6 +34,7 @@ class EditFragment : Fragment() {
     private lateinit var dowToggleButtonGroup: DOWToggleButtonGroup
     private lateinit var registerButton: Button
     private lateinit var cancelButton: Button
+    private var propertyId = -1
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +73,36 @@ class EditFragment : Fragment() {
 
         snoozeSpinner.isEnabled = false
         dowToggleButtonGroup.setEnabledToAll(false)
+
+        // 編集時の処理
+        try {
+            val propertyIdStr = requireArguments().getString("EDITED_PROPERTY_ID")
+            if (propertyIdStr != null) {
+                propertyId = Integer.parseInt(propertyIdStr)
+                val property = AlarmConfigurator.createPropertyList(requireContext())!![propertyId]
+
+                initValueOfComponents(property)
+            }
+        } catch (e: IllegalStateException) {
+            Logger.write(LogType.INFO, "bundle don't have key 'EDITED_PROPERTY_ID'")
+        }
+    }
+
+    /**
+     * 編集時の各コンポーネントの初期値をセットする
+     * @param property アラーム情報
+     */
+    private fun initValueOfComponents(property: AlarmProperty) {
+        alarmEditText.setText(property.title)
+        hourSpinner.setSelection(property.hour)
+        minuteSpinner.setSelection(property.minute)
+        snoozeSwitchCompat.isChecked = property.hasSnoozed
+        snoozeSpinner.isEnabled = snoozeSwitchCompat.isChecked
+        snoozeSpinner.setSelection(property.snoozeTime)
+        repeatSwitchCompat.isChecked = property.hasRepeated
+        dowToggleButtonGroup.setEnabledToAll(repeatSwitchCompat.isChecked)
+        dowToggleButtonGroup.setChecked(property.dow)
+        registerButton.text = requireContext().getText(R.string.update)
     }
 
     /**
@@ -102,25 +135,17 @@ class EditFragment : Fragment() {
                 toast.showErrorMessage(R.string.error_edit_text_empty)
                 return@OnClickListener
             }
-            val jsonFileManager = JsonFileManager(context)
-            var propertyList: AlarmList?
-            try {
-                propertyList = jsonFileManager.load()
 
-                // ファイルの読み込みができなかった場合
-                if (propertyList == null) {
-                    toast.showErrorMessage(R.string.error_failed_load_file)
-                    return@OnClickListener
-                }
-            } catch (e: FileNotFoundException) {
-                propertyList = AlarmList()
+            val propertyList = AlarmConfigurator.createPropertyList(context)
+            val property = createPropertyFromInput()
+            if (propertyId == -1) {
+                propertyList!!.add(property)
+            } else {
+                propertyList!![propertyId] = property
             }
 
-            val property = createPropertyFromInput()
-            propertyList!!.add(property)
-
             // ファイルの書き込みができなかった場合
-            if (!jsonFileManager.write(propertyList)) {
+            if (!JsonFileManager(context).write(propertyList)) {
                 toast.showErrorMessage(R.string.error_failed_write_file)
                 propertyList.remove(property)
                 return@OnClickListener

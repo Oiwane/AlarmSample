@@ -17,6 +17,7 @@
     <string name="alarm_dow_fri">金</string>
     <string name="alarm_dow_sat">土</string>
     <string name="register">登録</string>
+    <string name="update">更新</string>
     <string name="cancel">キャンセル</string>
 
     <string name="hint_alarm_name">アラーム名を入力してください</string>

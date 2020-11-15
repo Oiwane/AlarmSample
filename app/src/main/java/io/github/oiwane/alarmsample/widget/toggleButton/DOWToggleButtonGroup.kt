@@ -18,6 +18,16 @@ class DOWToggleButtonGroup(view: View) {
     var friToggleButton: ToggleButton = view.findViewById(R.id.friToggleButton)
     var satToggleButton: ToggleButton = view.findViewById(R.id.satToggleButton)
 
+    fun setChecked(dow: DayOfWeek) {
+        sunToggleButton.isChecked = dow.sun
+        monToggleButton.isChecked = dow.mon
+        tueToggleButton.isChecked = dow.tue
+        wedToggleButton.isChecked = dow.wed
+        thuToggleButton.isChecked = dow.thu
+        friToggleButton.isChecked = dow.fri
+        satToggleButton.isChecked = dow.sat
+    }
+
     /**
      * すべてのトグルボタンの有効/無効を設定する
      * @param isEnabled 有効か

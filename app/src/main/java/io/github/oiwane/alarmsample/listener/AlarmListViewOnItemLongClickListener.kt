@@ -6,11 +6,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.PopupMenu
+import androidx.navigation.NavController
 import io.github.oiwane.alarmsample.R
 
 class AlarmListViewOnItemLongClickListener(
     private val activity: Activity,
-    private val context: Context
+    private val context: Context,
+    private val navController: NavController?
 ): AdapterView.OnItemLongClickListener{
     override fun onItemLongClick(
         parent: AdapterView<*>?, view: View?, position: Int, id: Long
@@ -20,7 +22,7 @@ class AlarmListViewOnItemLongClickListener(
         val popup = PopupMenu(context, view!!)
         popup.menuInflater.inflate(R.menu.popup_menut, popup.menu)
         popup.show()
-        popup.setOnMenuItemClickListener(PopupMenuOnMenuItemClickListener(activity, context, parent, position))
+        popup.setOnMenuItemClickListener(PopupMenuOnMenuItemClickListener(activity, context, parent, position, navController))
         return true
     }
 }
