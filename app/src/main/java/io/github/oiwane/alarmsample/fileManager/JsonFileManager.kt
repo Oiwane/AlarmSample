@@ -42,7 +42,6 @@ class JsonFileManager(private val context: Context) {
             return jacksonObjectMapper().readValue(read()) as AlarmList
         } catch (e: UnrecognizedPropertyException) {
             Logger.write(LogType.ERROR, context, R.string.message_convert_failed)
-            Log.e("JsonFileManager", "convert failed.")
         } catch (e: MismatchedInputException) {
             Logger.write(LogType.ERROR, context, R.string.message_mismatch_property)
         }

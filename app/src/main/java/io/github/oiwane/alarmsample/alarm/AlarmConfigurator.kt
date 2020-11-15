@@ -111,7 +111,7 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
             } catch (e: FileNotFoundException) {
                 Logger.write(LogType.ERROR, context, R.string.message_not_found_file)
                 ErrorMessageToast(context).showErrorMessage(R.string.error_failed_not_found_file)
-                null
+                AlarmList()
             }
         }
     }

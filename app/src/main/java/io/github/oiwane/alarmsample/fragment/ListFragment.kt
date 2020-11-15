@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.data.AlarmList
@@ -35,6 +36,6 @@ class ListFragment : Fragment() {
         val list = AlarmConfigurator(activity, context).resetAlarm(propertyList)
         alarmListView.adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, list)
         alarmListView.onItemLongClickListener =
-            AlarmListViewOnItemLongClickListener(activity, context)
+            AlarmListViewOnItemLongClickListener(activity, context, findNavController())
     }
 }
