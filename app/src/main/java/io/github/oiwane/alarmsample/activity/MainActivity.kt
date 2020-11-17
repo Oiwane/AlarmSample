@@ -1,4 +1,4 @@
-package io.github.oiwane.alarmsample
+package io.github.oiwane.alarmsample.activity
 
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.findNavController
+import io.github.oiwane.alarmsample.R
 
 class MainActivity : AppCompatActivity() {
 
