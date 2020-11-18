@@ -13,4 +13,8 @@
         android:id="@+id/EditFragment"
         android:name="io.github.oiwane.alarmsample.fragment.EditFragment"
         tools:layout="@layout/edit_fragment"/>
+    <fragment
+        android:id="@+id/StopFragment"
+        android:name="io.github.oiwane.alarmsample.activity.StopAlarmActivity"
+        tools:layout="@layout/activity_stop_alarm" />
 </navigation>
