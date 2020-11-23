@@ -9,15 +9,15 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
+import io.github.oiwane.alarmsample.viewModel.AlarmViewModel
 import io.github.oiwane.alarmsample.widget.spinner.SpinnerContentInitializer
 import io.github.oiwane.alarmsample.widget.toggleButton.DOWToggleButtonGroup
 
@@ -36,6 +36,8 @@ class EditFragment : Fragment() {
     private lateinit var cancelButton: Button
     private var propertyId = -1
 
+    private lateinit var alarmViewModel: AlarmViewModel
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -46,6 +48,8 @@ class EditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        alarmViewModel = ViewModelProvider(requireActivity(), AlarmViewModel.Factory(requireContext())).get(AlarmViewModel::class.java)
 
         initComponents(view)
         initListeners()
@@ -79,7 +83,7 @@ class EditFragment : Fragment() {
             val propertyIdStr = requireArguments().getString("EDITED_PROPERTY_ID")
             if (propertyIdStr != null) {
                 propertyId = Integer.parseInt(propertyIdStr)
-                val property = AlarmConfigurator.createPropertyList(requireContext())!![propertyId]
+                val property = alarmViewModel.alarmList.value!![propertyId]
 
                 initValueOfComponents(property)
             }
@@ -136,7 +140,7 @@ class EditFragment : Fragment() {
                 return@OnClickListener
             }
 
-            val propertyList = AlarmConfigurator.createPropertyList(context)
+            val propertyList = alarmViewModel.alarmList.value
             val property = createPropertyFromInput()
             if (propertyId == -1) {
                 propertyList!!.add(property)
