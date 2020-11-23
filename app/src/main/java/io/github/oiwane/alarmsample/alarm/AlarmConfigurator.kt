@@ -94,6 +94,8 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
     }
 
     companion object {
+        const val CHANNEL_ID = "stop_alarm"
+
         /**
          * Jsonファイルのアラーム情報をリストにする
          * @param context コンテキスト
