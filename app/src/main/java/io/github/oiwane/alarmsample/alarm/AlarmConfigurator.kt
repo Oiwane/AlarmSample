@@ -1,5 +1,6 @@
 package io.github.oiwane.alarmsample.alarm
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -15,6 +16,7 @@ import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import java.io.FileNotFoundException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -52,9 +54,11 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
      * @param property アラーム情報
      * @param requestCode リクエストコード
      */
+    @SuppressLint("SimpleDateFormat")
     private fun setUpAlarm(property: AlarmProperty, requestCode: Int) {
         Logger.write(LogType.INFO, "alarm target : $property")
         val calendar = property.calcTriggerCalendar()
+        Logger.write(LogType.INFO, SimpleDateFormat("yyyy/MM/dd (E) HH:mm").format(calendar.time))
         intent.data = Uri.parse(requestCode.toString())
         val pendingIntent = PendingIntent.getBroadcast(
             activity, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT

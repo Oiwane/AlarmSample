@@ -1,5 +1,6 @@
 package io.github.oiwane.alarmsample.data
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
@@ -41,6 +42,10 @@ class AlarmProperty{
         this.dow = dow
     }
 
+    /**
+     * アラームを鳴らす日時を計算する
+     * @return アラームを鳴らす日時
+     */
     fun calcTriggerCalendar(): Calendar {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
@@ -52,7 +57,27 @@ class AlarmProperty{
         if (calendar <= now) {
             calendar.add(Calendar.DATE, 1)
         }
+        if (dow.isSpecified()) {
+            reflectRepeatSettings(calendar)
+        }
         return calendar
+    }
+
+    /**
+     * 繰り返し機能の設定を反映する
+     * @param calendar アラームを鳴らす日時
+     */
+    private fun reflectRepeatSettings(calendar: Calendar) {
+        val array = arrayOf(dow.sat, dow.sun, dow.mon, dow.tue, dow.wed, dow.thu, dow.fri)
+        val currentDow = calendar.get(Calendar.DAY_OF_WEEK)
+        for (i in 0..6) {
+            val dayOfWeek = currentDow + i
+            if (array[dayOfWeek % 7]) {
+                val addition = (dayOfWeek - currentDow + 7) % 7
+                calendar.add(Calendar.DAY_OF_WEEK, addition)
+                break
+            }
+        }
     }
 
     override fun toString(): String {
@@ -92,6 +117,7 @@ class DayOfWeek(
      * 曜日指定しているか
      * @return 曜日指定しているか
      */
+    @JsonIgnore
     fun isSpecified(): Boolean {
         return sun || mon || tue || wed || thu || fri || sat
     }
