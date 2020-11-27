@@ -28,7 +28,6 @@ class JsonFileManagerTest {
                 "\"fri\":false," +
                 "\"sat\":false" +
             "}," +
-            "\"hasRepeated\":false," +
             "\"hasSnoozed\":false," +
             "\"hour\":0," +
             "\"id\":\"dummy-property\"," +
@@ -53,7 +52,6 @@ class JsonFileManagerTest {
             0,
             false,
             0,
-            false,
             DayOfWeek()
         )
         propertyList.add(alarmProperty)

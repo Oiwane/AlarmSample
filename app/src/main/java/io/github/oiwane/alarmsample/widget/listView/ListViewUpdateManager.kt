@@ -9,6 +9,7 @@ import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 
 class ListViewUpdateManager {
     companion object {
+        // TODO : propertyIdとしてproperty.idを受け取る
         /**
          * PopupMenuで選択した更新方法でListViewを更新する
          * @param popupMenuTitle PopupMenuの選択したタイトル
@@ -24,25 +25,40 @@ class ListViewUpdateManager {
             propertyId: Int,
             navController: NavController?
         ): Boolean {
-            when (popupMenuTitle) {
+            return when (popupMenuTitle) {
                 context.getString(R.string.popup_edit) -> {
-                    val bundle = Bundle()
-                    bundle.putString("EDITED_PROPERTY_ID", propertyId.toString())
-                    if (navController == null)
-                        return false
-                    navController.navigate(R.id.EditFragment, bundle)
-                    return true
+                    edit(propertyId, navController)
                 }
                 context.getString(R.string.popup_remove) -> {
-                    val property = alarmList.removeAt(propertyId)
-                    if (!JsonFileManager(context).write(alarmList)) {
-                        alarmList.add(propertyId, property)
-                        return false
-                    }
-                    return true
+                    remove(alarmList, propertyId, context)
                 }
-                else -> return false
+                else -> false
             }
+        }
+
+        /**
+         * アラームを編集する
+         * @param propertyId
+         */
+        private fun edit(propertyId: Int, navController: NavController?): Boolean {
+            val bundle = Bundle()
+            bundle.putString("EDITED_PROPERTY_ID", propertyId.toString())
+            if (navController == null)
+                return false
+            navController.navigate(R.id.EditFragment, bundle)
+            return true
+        }
+
+        /**
+         * アラームを削除する
+         */
+        private fun remove(alarmList: AlarmList, propertyId: Int, context: Context): Boolean {
+            val property = alarmList.removeAt(propertyId)
+            if (!JsonFileManager(context).write(alarmList)) {
+                alarmList.add(propertyId, property)
+                return false
+            }
+            return true
         }
     }
 }

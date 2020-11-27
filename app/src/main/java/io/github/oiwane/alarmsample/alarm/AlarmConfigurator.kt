@@ -15,6 +15,8 @@ import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import java.io.FileNotFoundException
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AlarmConfigurator(private val activity: Activity, context: Context) {
 
@@ -50,7 +52,7 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
      * @param property アラーム情報
      * @param requestCode リクエストコード
      */
-    fun setUpAlarm(property: AlarmProperty, requestCode: Int) {
+    private fun setUpAlarm(property: AlarmProperty, requestCode: Int) {
         Logger.write(LogType.INFO, "alarm target : $property")
         val calendar = property.calcTriggerCalendar()
         intent.data = Uri.parse(requestCode.toString())
@@ -93,8 +95,28 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
         Logger.write(LogType.INFO, "end")
     }
 
+    /**
+     * スヌーズ
+     * @param requestCode リクエストコード
+     * @param property アラーム情報
+     */
+    fun snooze(requestCode: Int, property: AlarmProperty) {
+        stop(requestCode)
+        val snoozeProperty = AlarmProperty(
+            property.id,
+            property.title,
+            property.hour,
+            Calendar.getInstance().get(Calendar.MINUTE) + (property.snoozeTime + 1) * 5,
+            property.hasSnoozed,
+            property.snoozeTime,
+            property.dow
+        )
+        setUpAlarm(snoozeProperty, requestCode)
+    }
+
     companion object {
         const val CHANNEL_ID = "stop_alarm"
+        const val ALARM_REQUEST_CODE = "ALARM_REQUEST_CODE"
 
         /**
          * Jsonファイルのアラーム情報をリストにする

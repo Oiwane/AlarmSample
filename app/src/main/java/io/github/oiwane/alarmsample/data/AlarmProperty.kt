@@ -10,11 +10,10 @@ class AlarmProperty{
     @JsonProperty val minute: Int
     @JsonProperty val hasSnoozed: Boolean
     @JsonProperty val snoozeTime: Int
-    @JsonProperty val hasRepeated: Boolean
     @JsonProperty val dow: DayOfWeek
 
     // Jsonの例外対策
-    constructor(): this("", 0, 0, false, 0, false, DayOfWeek())
+    constructor(): this("", 0, 0, false, 0, DayOfWeek())
 
     constructor(id: String,
                 title: String,
@@ -22,9 +21,8 @@ class AlarmProperty{
                 minute: Int,
                 hasSnoozed: Boolean,
                 snoozeTime: Int,
-                hasRepeated: Boolean,
                 dow: DayOfWeek
-    ): this(title, hour, minute, hasSnoozed, snoozeTime, hasRepeated, dow) {
+    ): this(title, hour, minute, hasSnoozed, snoozeTime, dow) {
         this.id = id
     }
 
@@ -33,7 +31,6 @@ class AlarmProperty{
                 minute: Int,
                 hasSnoozed: Boolean,
                 snoozeTime: Int,
-                hasRepeated: Boolean,
                 dow: DayOfWeek
     ) {
         this.title = title
@@ -41,7 +38,6 @@ class AlarmProperty{
         this.minute = minute
         this.hasSnoozed = hasSnoozed
         this.snoozeTime = snoozeTime
-        this.hasRepeated = hasRepeated
         this.dow = dow
     }
 
@@ -66,7 +62,6 @@ class AlarmProperty{
                 "minute: $minute, " +
                 "hasSnoozed: $hasSnoozed, " +
                 "snoozeTime: $snoozeTime, " +
-                "hasRepeated: $hasRepeated, " +
                 "dow: $dow]"
     }
 }
@@ -91,5 +86,13 @@ class DayOfWeek(
                 "thu: $thu, " +
                 "fri: $fri, " +
                 "sat: $sat]"
+    }
+
+    /**
+     * 曜日指定しているか
+     * @return 曜日指定しているか
+     */
+    fun isSpecified(): Boolean {
+        return sun || mon || tue || wed || thu || fri || sat
     }
 }

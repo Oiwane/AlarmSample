@@ -19,14 +19,8 @@ class Logger {
         }
 
         fun write(type: LogType, context: Context, messageId: Int) {
-            val stackTraceElement = Thread.currentThread().stackTrace[3]
-            val methodName = stackTraceElement.className + "." + stackTraceElement.methodName
             val message = context.getString(messageId)
-            when (type) {
-                LogType.INFO -> Log.i(methodName, message)
-                LogType.ERROR -> Log.e(methodName, message)
-                LogType.DEBUG -> Log.d(methodName, message)
-            }
+            write(type, message)
         }
     }
 }

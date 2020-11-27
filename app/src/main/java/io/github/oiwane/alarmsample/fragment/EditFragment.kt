@@ -30,7 +30,6 @@ class EditFragment : Fragment() {
     private lateinit var minuteSpinner: Spinner
     private lateinit var snoozeSwitchCompat: SwitchCompat
     private lateinit var snoozeSpinner: Spinner
-    private lateinit var repeatSwitchCompat: SwitchCompat
     private lateinit var dowToggleButtonGroup: DOWToggleButtonGroup
     private lateinit var registerButton: Button
     private lateinit var cancelButton: Button
@@ -65,7 +64,6 @@ class EditFragment : Fragment() {
         minuteSpinner = view.findViewById(R.id.minuteSpinner)
         snoozeSwitchCompat = view.findViewById(R.id.snoozeSwitch)
         snoozeSpinner = view.findViewById(R.id.snoozeSpinner)
-        repeatSwitchCompat = view.findViewById(R.id.repeatSwitch)
         dowToggleButtonGroup = DOWToggleButtonGroup(view)
         registerButton = view.findViewById(R.id.registerButton)
         cancelButton = view.findViewById(R.id.cancelButton)
@@ -76,7 +74,6 @@ class EditFragment : Fragment() {
         initializer.initSpinnerContent(snoozeSpinner, 5..20, 5, "%d分")
 
         snoozeSpinner.isEnabled = false
-        dowToggleButtonGroup.setEnabledToAll(false)
 
         // 編集時の処理
         try {
@@ -103,8 +100,6 @@ class EditFragment : Fragment() {
         snoozeSwitchCompat.isChecked = property.hasSnoozed
         snoozeSpinner.isEnabled = snoozeSwitchCompat.isChecked
         snoozeSpinner.setSelection(property.snoozeTime)
-        repeatSwitchCompat.isChecked = property.hasRepeated
-        dowToggleButtonGroup.setEnabledToAll(repeatSwitchCompat.isChecked)
         dowToggleButtonGroup.setChecked(property.dow)
         registerButton.text = requireContext().getText(R.string.update)
     }
@@ -115,9 +110,6 @@ class EditFragment : Fragment() {
     private fun initListeners() {
         snoozeSwitchCompat.setOnCheckedChangeListener { _, isChecked ->
             snoozeSpinner.isEnabled = isChecked
-        }
-        repeatSwitchCompat.setOnCheckedChangeListener { _, isChecked ->
-            dowToggleButtonGroup.setEnabledToAll(isChecked)
         }
         registerButton.setOnClickListener(createOnClickListenerOfRegisterButton())
         cancelButton.setOnClickListener {
@@ -170,7 +162,6 @@ class EditFragment : Fragment() {
             minuteSpinner.selectedItemPosition,
             snoozeSwitchCompat.isChecked,
             snoozeSpinner.selectedItemPosition,
-            repeatSwitchCompat.isChecked,
             dowToggleButtonGroup.getDayOfWeek()
         )
     }
