@@ -38,4 +38,5 @@
     <!-- ポップアップ -->
     <string name="popup_edit">編集</string>
     <string name="popup_remove">削除</string>
+    <string name="button_snooze">スヌーズ</string>
 </resources>
