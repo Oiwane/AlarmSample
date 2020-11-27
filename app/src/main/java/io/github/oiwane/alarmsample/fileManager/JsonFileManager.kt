@@ -1,7 +1,6 @@
 package io.github.oiwane.alarmsample.fileManager
 
 import android.content.Context
-import android.util.Log
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper

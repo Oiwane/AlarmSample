@@ -10,13 +10,13 @@ import io.github.oiwane.alarmsample.data.DayOfWeek
  * @param view トグルボタンの親
  */
 class DOWToggleButtonGroup(view: View) {
-    var sunToggleButton: ToggleButton = view.findViewById(R.id.sunToggleButton)
-    var monToggleButton: ToggleButton = view.findViewById(R.id.monToggleButton)
-    var tueToggleButton: ToggleButton = view.findViewById(R.id.tueToggleButton)
-    var wedToggleButton: ToggleButton = view.findViewById(R.id.wedToggleButton)
-    var thuToggleButton: ToggleButton = view.findViewById(R.id.thuToggleButton)
-    var friToggleButton: ToggleButton = view.findViewById(R.id.friToggleButton)
-    var satToggleButton: ToggleButton = view.findViewById(R.id.satToggleButton)
+    private val sunToggleButton: ToggleButton = view.findViewById(R.id.sunToggleButton)
+    private val monToggleButton: ToggleButton = view.findViewById(R.id.monToggleButton)
+    private val tueToggleButton: ToggleButton = view.findViewById(R.id.tueToggleButton)
+    private val wedToggleButton: ToggleButton = view.findViewById(R.id.wedToggleButton)
+    private val thuToggleButton: ToggleButton = view.findViewById(R.id.thuToggleButton)
+    private val friToggleButton: ToggleButton = view.findViewById(R.id.friToggleButton)
+    private val satToggleButton: ToggleButton = view.findViewById(R.id.satToggleButton)
 
     fun setChecked(dow: DayOfWeek) {
         sunToggleButton.isChecked = dow.sun
@@ -26,20 +26,6 @@ class DOWToggleButtonGroup(view: View) {
         thuToggleButton.isChecked = dow.thu
         friToggleButton.isChecked = dow.fri
         satToggleButton.isChecked = dow.sat
-    }
-
-    /**
-     * すべてのトグルボタンの有効/無効を設定する
-     * @param isEnabled 有効か
-     */
-    fun setEnabledToAll(isEnabled: Boolean) {
-        sunToggleButton.isEnabled = isEnabled
-        monToggleButton.isEnabled = isEnabled
-        tueToggleButton.isEnabled = isEnabled
-        wedToggleButton.isEnabled = isEnabled
-        thuToggleButton.isEnabled = isEnabled
-        friToggleButton.isEnabled = isEnabled
-        satToggleButton.isEnabled = isEnabled
     }
 
     /**

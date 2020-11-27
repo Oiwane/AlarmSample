@@ -17,7 +17,7 @@ class AlarmViewModel(context: Context): ViewModel() {
     }
 
     private val _alarmList = MutableLiveData<AlarmList>().apply {
-        value = AlarmConfigurator.createPropertyList(context)
+        value = AlarmConfigurator.createPropertyList(context) ?: AlarmList()
     }
     var alarmList: LiveData<AlarmList> = _alarmList
 }

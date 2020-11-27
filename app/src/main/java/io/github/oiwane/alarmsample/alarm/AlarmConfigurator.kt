@@ -109,7 +109,6 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
             Calendar.getInstance().get(Calendar.MINUTE) + (property.snoozeTime + 1) * 5,
             property.hasSnoozed,
             property.snoozeTime,
-            property.hasRepeated,
             property.dow
         )
         setUpAlarm(snoozeProperty, requestCode)

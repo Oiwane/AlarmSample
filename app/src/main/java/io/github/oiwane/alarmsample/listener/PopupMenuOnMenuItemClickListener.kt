@@ -7,13 +7,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import io.github.oiwane.alarmsample.widget.listView.ListViewUpdateManager
 
 // TODO : navControllerをactivityから取得するように変更
+// TODO : indexはproperty.id: Stringを受け取るようにする
 class PopupMenuOnMenuItemClickListener(
     private val activity: Activity,
     private val context: Context,

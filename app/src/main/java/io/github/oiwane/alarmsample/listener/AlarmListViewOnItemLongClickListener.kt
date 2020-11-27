@@ -21,8 +21,9 @@ class AlarmListViewOnItemLongClickListener(
             return true
         val popup = PopupMenu(context, view!!)
         popup.menuInflater.inflate(R.menu.popup_menut, popup.menu)
-        popup.show()
+        // TODO positionではなくproperty.idを渡す
         popup.setOnMenuItemClickListener(PopupMenuOnMenuItemClickListener(activity, context, parent, position, navController))
+        popup.show()
         return true
     }
 }

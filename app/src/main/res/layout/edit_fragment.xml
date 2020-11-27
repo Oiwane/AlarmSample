@@ -117,8 +117,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/repeatSwitch"
+    <TextView
+        android:id="@+id/repeatTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -141,7 +141,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repeatSwitch">
+        app:layout_constraintTop_toBottomOf="@+id/repeatTextView">
 
         <io.github.oiwane.alarmsample.widget.layout.SquareLayout
             android:layout_width="wrap_content"

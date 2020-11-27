@@ -24,22 +24,15 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
     override fun onReceive(context: Context?, intent: Intent?) {
         Logger.write(LogType.INFO, "start")
 
-        // リクエストIDを取得
+        // リクエストコードを取得
         requestCode = intent!!.data.toString()
         Logger.write(LogType.INFO, "requestCode : $requestCode")
         if (requestCode == null)
             return
 
-        // リクエストIDを設定
+        // 通知の準備と送信
         val alarmIntent = createIntent(context)
-
-        // 通知のタップ時の遷移先設定
-        val stackBuilder = TaskStackBuilder.create(context)
-        stackBuilder.addParentStack(MainActivity::class.java)
-        stackBuilder.addNextIntent(alarmIntent)
-        val broadcast = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        // 通知の送信
+        val broadcast = setUpTransition(context, alarmIntent)
         val pendingIntent = PendingIntent.getActivity(
             context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -51,6 +44,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
 
     /**
      * intentを作成
+     *
+     * ここでリクエストコードを設定する
      * @param context コンテキスト
      * @return 通知に持たせるintent
      */
@@ -60,6 +55,20 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
         }
         intent.putExtra("ALARM_REQUEST_CODE", requestCode)
         return intent
+    }
+
+    /**
+     * 通知のタップ時の遷移先を設定する
+     * @param context コンテキスト
+     * @param alarmIntent インテント
+     * @return 遷移先を設定したpendingIntent
+     */
+    private fun setUpTransition(context: Context?, alarmIntent: Intent): PendingIntent? {
+        val stackBuilder = TaskStackBuilder.create(context)
+        stackBuilder.addParentStack(MainActivity::class.java)
+        stackBuilder.addNextIntent(alarmIntent)
+        val broadcast = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        return broadcast
     }
 
     /**
