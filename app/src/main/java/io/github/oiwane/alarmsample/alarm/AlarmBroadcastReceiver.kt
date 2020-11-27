@@ -12,6 +12,7 @@ import io.github.oiwane.alarmsample.activity.MainActivity
 import io.github.oiwane.alarmsample.activity.StopAlarmActivity
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
+import java.util.*
 
 /**
  * AlarmManagerからの通知を受け取る
@@ -70,15 +71,15 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
     private fun createNotifyBuilder(
         context: Context, pendingIntent: PendingIntent?, broadcast: PendingIntent?
     ): NotificationCompat.Builder? {
-        val alarmList = AlarmConfigurator.createPropertyList(context) ?: return null
-        val alarmProperty = alarmList[Integer.parseInt(requestCode!!)]
+        val calendar = Calendar.getInstance()
+        val time = "%02d:%02d".format(calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE))
         return NotificationCompat.Builder(context, AlarmConfigurator.CHANNEL_ID)
     //            .addAction(android.R.drawable.bottom_bar, "stop", broadcast)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("Alarm")
-            .setContentText("${alarmProperty.hour}:${alarmProperty.minute}")
+            .setContentText(time)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setFullScreenIntent(pendingIntent, true)
             .setContentIntent(broadcast)
             .setAutoCancel(true)
