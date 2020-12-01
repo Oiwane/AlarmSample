@@ -21,14 +21,18 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
 {
     var requestCode: String? = null
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent?) {
         Logger.write(LogType.INFO, "start")
 
         // リクエストコードを取得
         requestCode = intent!!.data.toString()
         Logger.write(LogType.INFO, "requestCode : $requestCode")
-        if (requestCode == null)
+        if (requestCode.isNullOrBlank()) {
+            val alarmList = AlarmConfigurator.createPropertyList(context)
+            if (alarmList != null)
+                AlarmConfigurator(context as Activity, context).resetAllAlarm(alarmList)
             return
+        }
 
         // 通知の準備と送信
         val alarmIntent = createIntent(context)
@@ -36,7 +40,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
         val pendingIntent = PendingIntent.getActivity(
             context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val notificationBuilder = createNotifyBuilder(context!!, pendingIntent, broadcast) ?: return
+        val notificationBuilder = createNotifyBuilder(context, pendingIntent, broadcast) ?: return
         notify(context, notificationBuilder.build())
 
         Logger.write(LogType.INFO, "end")
@@ -67,8 +71,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(MainActivity::class.java)
         stackBuilder.addNextIntent(alarmIntent)
-        val broadcast = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-        return broadcast
+        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     /**

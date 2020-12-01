@@ -18,9 +18,8 @@ import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class AlarmConfigurator(private val activity: Activity, context: Context) {
+class AlarmConfigurator(private val activity: Activity, private val context: Context) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val intent = Intent(context, AlarmBroadcastReceiver::class.java)
@@ -30,9 +29,14 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
      * @param alarmList アラーム情報リスト
      * @return アラーム一覧に表示する情報
      */
-    fun resetAlarm(alarmList: AlarmList): ArrayList<String> {
+    fun resetAllAlarm(alarmList: AlarmList) {
         stopAllAlarm()
-        return setUpAllAlarm(alarmList)
+        setUpAllAlarm(alarmList)
+    }
+
+    fun resetAlarm(property: AlarmProperty, requestCode: Int) {
+        stop(requestCode)
+        setUpAlarm(property, requestCode)
     }
 
     /**
@@ -40,13 +44,10 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
      * @param alarmList アラーム情報リスト
      * @return アラーム一覧に表示する情報
      */
-    private fun setUpAllAlarm(alarmList: AlarmList): ArrayList<String> {
-        val list = ArrayList<String>()
+    private fun setUpAllAlarm(alarmList: AlarmList) {
         for ((index, property) in alarmList.withIndex()) {
-            list.add(property.title)
             setUpAlarm(property, index)
         }
-        return list
     }
 
     /**
