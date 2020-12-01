@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
+import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.log.LogType
@@ -146,6 +147,8 @@ class EditFragment : Fragment() {
                 propertyList.remove(property)
                 return@OnClickListener
             }
+
+            AlarmConfigurator(requireActivity(), requireContext()).resetAlarm(property, propertyId)
 
             findNavController().popBackStack()
         }

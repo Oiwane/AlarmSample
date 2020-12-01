@@ -28,7 +28,9 @@ class PopupMenuOnMenuItemClickListener(
             return true
         }
         if (ListViewUpdateManager.update(item.title, context, alarmList, index, navController)) {
-            val list = AlarmConfigurator(activity, context).resetAlarm(alarmList)
+            AlarmConfigurator(activity, context).resetAllAlarm(alarmList)
+            val list = ArrayList<String>()
+            alarmList.forEach { property -> list.add(property.title) }
             parent.adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, list)
         }
         return true
