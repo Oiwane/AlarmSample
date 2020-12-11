@@ -6,6 +6,7 @@ import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.data.AlarmList
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
+import io.github.oiwane.alarmsample.util.Constants
 
 /**
  * スヌーズボタンの押下時の処理
@@ -16,12 +17,12 @@ class SnoozeButtonOnClickListener(
 ): View.OnClickListener {
     override fun onClick(v: View?) {
         try {
-            val requestCodeStr = activity.intent.getStringExtra(AlarmConfigurator.ALARM_REQUEST_CODE) ?: return
+            val requestCodeStr = activity.intent.getStringExtra(Constants.ALARM_REQUEST_CODE) ?: return
             val requestCode = Integer.parseInt(requestCodeStr)
-            AlarmConfigurator(activity, activity).snooze(requestCode, alarmList[requestCode])
+            AlarmConfigurator(activity, activity).snooze(alarmList[requestCode])
             activity.finish()
         } catch (e: IllegalStateException) {
-            Logger.write(LogType.INFO, "bundle don't have key '${AlarmConfigurator.ALARM_REQUEST_CODE}'")
+            Logger.write(LogType.INFO, "bundle don't have key '${Constants.ALARM_REQUEST_CODE}'")
         } catch (e: NumberFormatException) {
             Logger.write(LogType.ERROR, "failed parse string")
         }

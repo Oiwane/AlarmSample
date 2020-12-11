@@ -6,15 +6,16 @@ import java.util.*
 
 class AlarmProperty{
     @JsonProperty var id: String = UUID.randomUUID().toString()
-    @JsonProperty val title: String
-    @JsonProperty val hour: Int
-    @JsonProperty val minute: Int
-    @JsonProperty val hasSnoozed: Boolean
-    @JsonProperty val snoozeTime: Int
-    @JsonProperty val dow: DayOfWeek
+    @JsonProperty var title: String
+    @JsonProperty var hour: Int
+    @JsonProperty var minute: Int
+    @JsonProperty var hasSnoozed: Boolean
+    @JsonProperty var snoozeTime: Int
+    @JsonProperty var dow: DayOfWeek
+    @JsonProperty var isSet: Boolean
 
     // Jsonの例外対策
-    constructor(): this("", 0, 0, false, 0, DayOfWeek())
+    constructor(): this("", 0, 0, false, 0, DayOfWeek(), false)
 
     constructor(id: String,
                 title: String,
@@ -22,8 +23,9 @@ class AlarmProperty{
                 minute: Int,
                 hasSnoozed: Boolean,
                 snoozeTime: Int,
-                dow: DayOfWeek
-    ): this(title, hour, minute, hasSnoozed, snoozeTime, dow) {
+                dow: DayOfWeek,
+                isSet: Boolean
+    ): this(title, hour, minute, hasSnoozed, snoozeTime, dow, isSet) {
         this.id = id
     }
 
@@ -32,7 +34,8 @@ class AlarmProperty{
                 minute: Int,
                 hasSnoozed: Boolean,
                 snoozeTime: Int,
-                dow: DayOfWeek
+                dow: DayOfWeek,
+                isSet: Boolean
     ) {
         this.title = title
         this.hour = hour
@@ -40,6 +43,17 @@ class AlarmProperty{
         this.hasSnoozed = hasSnoozed
         this.snoozeTime = snoozeTime
         this.dow = dow
+        this.isSet = isSet
+    }
+
+    fun setProperty(newProperty: AlarmProperty) {
+        title = newProperty.title
+        hour = newProperty.hour
+        minute = newProperty.minute
+        hasSnoozed = newProperty.hasSnoozed
+        snoozeTime = newProperty.snoozeTime
+        dow = newProperty.dow
+        isSet = newProperty.isSet
     }
 
     /**
@@ -87,18 +101,19 @@ class AlarmProperty{
                 "minute: $minute, " +
                 "hasSnoozed: $hasSnoozed, " +
                 "snoozeTime: $snoozeTime, " +
-                "dow: $dow]"
+                "dow: $dow, " +
+                "isSet: $isSet]"
     }
 }
 
 class DayOfWeek(
-    @JsonProperty val sun: Boolean,
-    @JsonProperty val mon: Boolean,
-    @JsonProperty val tue: Boolean,
-    @JsonProperty val wed: Boolean,
-    @JsonProperty val thu: Boolean,
-    @JsonProperty val fri: Boolean,
-    @JsonProperty val sat: Boolean
+    @JsonProperty var sun: Boolean,
+    @JsonProperty var mon: Boolean,
+    @JsonProperty var tue: Boolean,
+    @JsonProperty var wed: Boolean,
+    @JsonProperty var thu: Boolean,
+    @JsonProperty var fri: Boolean,
+    @JsonProperty var sat: Boolean
 ) {
     // Jsonの例外対策
     constructor(): this(false, false, false, false, false, false, false)
