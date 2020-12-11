@@ -17,6 +17,7 @@ import io.github.oiwane.alarmsample.data.AlarmProperty
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
+import io.github.oiwane.alarmsample.util.Constants
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import io.github.oiwane.alarmsample.viewModel.AlarmViewModel
 import io.github.oiwane.alarmsample.widget.spinner.SpinnerContentInitializer
@@ -34,7 +35,7 @@ class EditFragment : Fragment() {
     private lateinit var dowToggleButtonGroup: DOWToggleButtonGroup
     private lateinit var registerButton: Button
     private lateinit var cancelButton: Button
-    private var propertyId = -1
+    private var propertyId: String? = null
 
     private lateinit var alarmViewModel: AlarmViewModel
 
@@ -51,7 +52,10 @@ class EditFragment : Fragment() {
 
         alarmViewModel = ViewModelProvider(requireActivity(), AlarmViewModel.Factory(requireContext())).get(AlarmViewModel::class.java)
 
-        initComponents(view)
+        if (initComponents(view)) {
+            findNavController().popBackStack()
+            return
+        }
         initListeners()
     }
 
@@ -59,7 +63,7 @@ class EditFragment : Fragment() {
      * コンポーネントを初期化する
      * @param view コンポーネントを保持するView
      */
-    private fun initComponents(view: View) {
+    private fun initComponents(view: View): Boolean {
         alarmEditText = view.findViewById(R.id.alarmEditText)
         hourSpinner = view.findViewById(R.id.hourSpinner)
         minuteSpinner = view.findViewById(R.id.minuteSpinner)
@@ -78,16 +82,17 @@ class EditFragment : Fragment() {
 
         // 編集時の処理
         try {
-            val propertyIdStr = requireArguments().getString("EDITED_PROPERTY_ID")
-            if (propertyIdStr != null) {
-                propertyId = Integer.parseInt(propertyIdStr)
-                val property = alarmViewModel.alarmList.value!![propertyId]
+            propertyId = requireArguments().getString(Constants.EDITED_PROPERTY_ID)
+            if (propertyId.isNullOrEmpty()) {
+                val property = alarmViewModel.alarmList.value!!.findById(propertyId!!) ?: return false
 
                 initValueOfComponents(property)
             }
         } catch (e: IllegalStateException) {
-            Logger.write(LogType.INFO, "bundle don't have key 'EDITED_PROPERTY_ID'")
+            Logger.write(LogType.INFO, "bundle don't have key '${Constants.EDITED_PROPERTY_ID}'")
+            return false
         }
+        return true
     }
 
     /**
@@ -135,10 +140,10 @@ class EditFragment : Fragment() {
 
             val propertyList = alarmViewModel.alarmList.value
             val property = createPropertyFromInput()
-            if (propertyId == -1) {
+            if (propertyId.isNullOrEmpty()) {
                 propertyList!!.add(property)
             } else {
-                propertyList!![propertyId] = property
+                propertyList!!.set(property)
             }
 
             // ファイルの書き込みができなかった場合
@@ -148,7 +153,7 @@ class EditFragment : Fragment() {
                 return@OnClickListener
             }
 
-            AlarmConfigurator(requireActivity(), requireContext()).resetAlarm(property, propertyId)
+            AlarmConfigurator(requireActivity(), requireContext()).setUpAlarm(property)
 
             findNavController().popBackStack()
         }
@@ -165,7 +170,8 @@ class EditFragment : Fragment() {
             minuteSpinner.selectedItemPosition,
             snoozeSwitchCompat.isChecked,
             snoozeSpinner.selectedItemPosition,
-            dowToggleButtonGroup.getDayOfWeek()
+            dowToggleButtonGroup.getDayOfWeek(),
+            true
         )
     }
 }

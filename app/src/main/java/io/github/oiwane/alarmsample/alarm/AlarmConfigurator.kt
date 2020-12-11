@@ -11,15 +11,18 @@ import android.os.Build
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.data.AlarmList
 import io.github.oiwane.alarmsample.data.AlarmProperty
+import io.github.oiwane.alarmsample.data.LimitedMap
+import io.github.oiwane.alarmsample.exception.InvalidAlarmOperationException
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
+import io.github.oiwane.alarmsample.util.Constants
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AlarmConfigurator(private val activity: Activity, private val context: Context) {
+class AlarmConfigurator(private val activity: Activity, context: Context) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val intent = Intent(context, AlarmBroadcastReceiver::class.java)
@@ -28,38 +31,35 @@ class AlarmConfigurator(private val activity: Activity, private val context: Con
      * アラームをリセットする
      * @param alarmList アラーム情報リスト
      * @return アラーム一覧に表示する情報
+     * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
     fun resetAllAlarm(alarmList: AlarmList) {
-        stopAllAlarm()
-        setUpAllAlarm(alarmList)
-    }
-
-    fun resetAlarm(property: AlarmProperty, requestCode: Int) {
-        stop(requestCode)
-        setUpAlarm(property, requestCode)
+        alarmList.forEach { resetAlarm(it) }
     }
 
     /**
-     * アラーム情報リストのアラームをセットする
-     * @param alarmList アラーム情報リスト
-     * @return アラーム一覧に表示する情報
+     * アラームをリセットする
+     * @param property アラーム情報
+     * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
-    private fun setUpAllAlarm(alarmList: AlarmList) {
-        for ((index, property) in alarmList.withIndex()) {
-            setUpAlarm(property, index)
-        }
+    fun resetAlarm(property: AlarmProperty) {
+        stopAlarm(property.id)
+        setUpAlarm(property)
     }
 
     /**
      * アラームを設定する
      * @param property アラーム情報
-     * @param requestCode リクエストコード
+     * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
     @SuppressLint("SimpleDateFormat")
-    private fun setUpAlarm(property: AlarmProperty, requestCode: Int) {
+    fun setUpAlarm(property: AlarmProperty) {
         Logger.write(LogType.INFO, "alarm target : $property")
+        val requestCode = IntRange(0, 9).find { !requestCodeMap.values.contains(it) } ?: throw InvalidAlarmOperationException()
+        requestCodeMap[property.id] = requestCode
         val calendar = property.calcTriggerCalendar()
-        Logger.write(LogType.INFO, SimpleDateFormat("yyyy/MM/dd (E) HH:mm").format(calendar.time))
+        Logger.write(LogType.INFO, SimpleDateFormat(Constants.DATE_FORMAT).format(calendar.time))
+
         intent.data = Uri.parse(requestCode.toString())
         val pendingIntent = PendingIntent.getBroadcast(
             activity, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
@@ -76,37 +76,28 @@ class AlarmConfigurator(private val activity: Activity, private val context: Con
     }
 
     /**
-     * アラームをすべて停止する
-     */
-    private fun stopAllAlarm() {
-        Logger.write(LogType.INFO, "start")
-        for (requestCode in 0..9) {
-            stop(requestCode)
-        }
-        Logger.write(LogType.INFO, "end")
-    }
-
-    /**
      * アラームを停止する
-     * @param requestCode アラームのコード
+     * @param propertyId アラーム情報のID
+     * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
-    fun stop(requestCode: Int) {
-        Logger.write(LogType.INFO, "start")
+    fun stopAlarm(propertyId: String) {
+        Logger.write(LogType.INFO, "start stopAlarm : $propertyId")
+        val requestCode = requestCodeMap[propertyId]?: throw InvalidAlarmOperationException()
         intent.data = Uri.parse(requestCode.toString())
         val pendingIntent = PendingIntent.getBroadcast(
             activity, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
         alarmManager.cancel(pendingIntent)
-        Logger.write(LogType.INFO, "end")
+        Logger.write(LogType.INFO, "end stopAlarm")
     }
 
     /**
      * スヌーズ
-     * @param requestCode リクエストコード
      * @param property アラーム情報
+     * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
-    fun snooze(requestCode: Int, property: AlarmProperty) {
-        stop(requestCode)
+    fun snooze(property: AlarmProperty) {
+        stopAlarm(property.id)
         val snoozeProperty = AlarmProperty(
             property.id,
             property.title,
@@ -114,14 +105,14 @@ class AlarmConfigurator(private val activity: Activity, private val context: Con
             Calendar.getInstance().get(Calendar.MINUTE) + (property.snoozeTime + 1) * 5,
             property.hasSnoozed,
             property.snoozeTime,
-            property.dow
+            property.dow,
+            true
         )
-        setUpAlarm(snoozeProperty, requestCode)
+        setUpAlarm(snoozeProperty)
     }
 
     companion object {
-        const val CHANNEL_ID = "stop_alarm"
-        const val ALARM_REQUEST_CODE = "ALARM_REQUEST_CODE"
+        val requestCodeMap = LimitedMap(10)
 
         /**
          * Jsonファイルのアラーム情報をリストにする

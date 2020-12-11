@@ -1,11 +1,22 @@
 package io.github.oiwane.alarmsample.data
 
 class AlarmList: ArrayList<AlarmProperty>() {
-    fun remove(id: String) {
+    fun set(newProperty: AlarmProperty): Boolean {
+        for (property in this) {
+            if (property.id == newProperty.id) {
+                property.setProperty(newProperty)
+                return true
+            }
+        }
+        return false
+    }
+
+    fun remove(id: String): Int? {
         for (property in this) {
             if (property.id == id)
-                remove(property)
+                return indexOf(property)
         }
+        return null
     }
 
     fun findById(id: String): AlarmProperty? {

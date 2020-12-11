@@ -22,7 +22,8 @@ class StopAlarmActivity: AppCompatActivity() {
         val stopButton: Button = findViewById(R.id.stopButton) ?: return
         val snoozeButton: Button = findViewById(R.id.snoozeButton) ?: return
 
-        stopButton.setOnClickListener(StopButtonOnClickListener(this))
-        snoozeButton.setOnClickListener(SnoozeButtonOnClickListener(this, alarmViewModel.alarmList.value!!))
+        val alarmList = alarmViewModel.alarmList.value!!
+        stopButton.setOnClickListener(StopButtonOnClickListener(this, alarmList))
+        snoozeButton.setOnClickListener(SnoozeButtonOnClickListener(this, alarmList))
     }
 }

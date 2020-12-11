@@ -1,5 +1,6 @@
 package io.github.oiwane.alarmsample.alarm
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,6 +13,7 @@ import io.github.oiwane.alarmsample.activity.MainActivity
 import io.github.oiwane.alarmsample.activity.StopAlarmActivity
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
+import io.github.oiwane.alarmsample.util.Constants
 import java.util.*
 
 /**
@@ -21,6 +23,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
 {
     var requestCode: String? = null
 
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
+    @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     override fun onReceive(context: Context, intent: Intent?) {
         Logger.write(LogType.INFO, "start")
 
@@ -38,7 +42,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
         val alarmIntent = createIntent(context)
         val broadcast = setUpTransition(context, alarmIntent)
         val pendingIntent = PendingIntent.getActivity(
-            context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            context, Integer.parseInt(requestCode!!), alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
         val notificationBuilder = createNotifyBuilder(context, pendingIntent, broadcast) ?: return
         notify(context, notificationBuilder.build())
@@ -57,7 +61,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
         val intent = Intent(context, StopAlarmActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        intent.putExtra("ALARM_REQUEST_CODE", requestCode)
+        intent.putExtra(Constants.ALARM_REQUEST_CODE, requestCode)
         return intent
     }
 
@@ -85,7 +89,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
     ): NotificationCompat.Builder? {
         val calendar = Calendar.getInstance()
         val time = "%02d:%02d".format(calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE))
-        return NotificationCompat.Builder(context, AlarmConfigurator.CHANNEL_ID)
+        return NotificationCompat.Builder(context, Constants.CHANNEL_ID)
     //            .addAction(android.R.drawable.bottom_bar, "stop", broadcast)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("Alarm")
@@ -117,7 +121,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
     private fun createChannel(context: Context): NotificationChannel {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val channel = NotificationChannel(
-            AlarmConfigurator.CHANNEL_ID,
+            Constants.CHANNEL_ID,
             context.getString(R.string.app_name),
             NotificationManager.IMPORTANCE_DEFAULT
         )

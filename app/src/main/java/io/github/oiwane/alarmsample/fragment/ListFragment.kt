@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
+import io.github.oiwane.alarmsample.adapter.ListViewAdapter
 import io.github.oiwane.alarmsample.data.AlarmList
 import io.github.oiwane.alarmsample.listener.AlarmListViewOnItemLongClickListener
 import io.github.oiwane.alarmsample.viewModel.AlarmViewModel
@@ -37,10 +38,8 @@ class ListFragment : Fragment() {
         alarmViewModel = ViewModelProvider(activity, AlarmViewModel.Factory(context)).get(AlarmViewModel::class.java)
 
         val alarmListView: ListView = view.findViewById(R.id.alarmListView)
-        val alarmList: AlarmList = alarmViewModel.alarmList.value ?: return
-        val list = ArrayList<String>()
-        alarmList.forEach { property -> list.add(property.title) }
-        alarmListView.adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, list)
+        val alarmList = alarmViewModel.alarmList.value ?: return
+        alarmListView.adapter = ListViewAdapter(activity, context, alarmList)
         alarmListView.onItemLongClickListener =
             AlarmListViewOnItemLongClickListener(activity, context, findNavController())
     }

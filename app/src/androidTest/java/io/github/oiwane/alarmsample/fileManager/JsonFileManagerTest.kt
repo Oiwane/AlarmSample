@@ -46,13 +46,7 @@ class JsonFileManagerTest {
     fun write() {
         val propertyList = AlarmList()
         val alarmProperty = AlarmProperty(
-            "dummy-property",
-            "dummy-title",
-            0,
-            0,
-            false,
-            0,
-            DayOfWeek()
+            "dummy-property", "dummy-title", 0, 0, false, 0, DayOfWeek(), true
         )
         propertyList.add(alarmProperty)
         val context = InstrumentationRegistry.getInstrumentation().targetContext
