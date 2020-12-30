@@ -40,6 +40,6 @@ class ListFragment : Fragment() {
         val alarmList = alarmViewModel.alarmList.value ?: return
         alarmListView.adapter = ListViewAdapter(activity, context, alarmList)
         alarmListView.onItemLongClickListener =
-            AlarmListViewOnItemLongClickListener(activity, context, findNavController())
+            AlarmListViewOnItemLongClickListener(context, findNavController())
     }
 }

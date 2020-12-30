@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.alarm.AlarmProperty
+import io.github.oiwane.alarmsample.exception.InvalidAlarmOperationException
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
@@ -91,7 +92,6 @@ class EditFragment : Fragment() {
             }
         } catch (e: IllegalStateException) {
             Logger.write(LogType.INFO, "bundle don't have key '${Constants.EDITED_PROPERTY_ID}'")
-            return false
         }
         return true
     }
@@ -120,7 +120,17 @@ class EditFragment : Fragment() {
         }
         registerButton.setOnClickListener(createOnClickListenerOfRegisterButton())
         cancelButton.setOnClickListener {
-            findNavController().popBackStack()
+            val alarmList = alarmViewModel.alarmList.value?: return@setOnClickListener
+            val activity = requireActivity()
+            val context = requireContext()
+            try {
+                AlarmConfigurator(activity, context).resetAllAlarm(alarmList)
+            } catch (e : InvalidAlarmOperationException) {
+                ErrorMessageToast(context).showErrorMessage(R.string.error_failed_update_alarm)
+            } finally {
+                if (!findNavController().popBackStack())
+                    activity.finish()
+            }
         }
     }
 
@@ -130,6 +140,7 @@ class EditFragment : Fragment() {
      */
     private fun createOnClickListenerOfRegisterButton(): View.OnClickListener {
         return View.OnClickListener {
+            val activity = requireActivity()
             val context = requireContext()
             val toast = ErrorMessageToast(context)
 
@@ -139,13 +150,12 @@ class EditFragment : Fragment() {
                 return@OnClickListener
             }
 
-            val propertyList = alarmViewModel.alarmList.value
+            val propertyList = alarmViewModel.alarmList.value?: return@OnClickListener
             val property = createPropertyFromInput()
-            if (propertyId.isNullOrEmpty()) {
-                propertyList!!.add(property)
-            } else {
-                propertyList!!.set(property)
-            }
+            if (propertyId.isNullOrEmpty())
+                propertyList.add(property)
+            else
+                propertyList.set(property)
 
             // ファイルの書き込みができなかった場合
             if (!JsonFileManager(context).write(propertyList)) {
@@ -154,9 +164,10 @@ class EditFragment : Fragment() {
                 return@OnClickListener
             }
 
-            AlarmConfigurator(requireActivity(), requireContext()).setUpAlarm(property)
+            AlarmConfigurator(activity, requireContext()).setUpAlarm(property)
 
-            findNavController().popBackStack()
+            if (!findNavController().popBackStack())
+                activity.finish()
         }
     }
 

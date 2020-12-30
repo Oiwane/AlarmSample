@@ -5,14 +5,12 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.PopupMenu
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 
 class AlarmListViewOnItemLongClickListener(
-    private val activity: FragmentActivity,
     private val context: Context,
     private val navController: NavController?
 ): AdapterView.OnItemLongClickListener{
@@ -24,7 +22,8 @@ class AlarmListViewOnItemLongClickListener(
             return true
         val popup = PopupMenu(context, view!!)
         popup.menuInflater.inflate(R.menu.popup_menut, popup.menu)
-        popup.setOnMenuItemClickListener(PopupMenuOnMenuItemClickListener(activity, context, parent, position, navController))
+        popup.setOnMenuItemClickListener(
+            PopupMenuOnMenuItemClickListener(context, position, navController))
         popup.show()
         return true
     }
