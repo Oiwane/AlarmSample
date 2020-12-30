@@ -15,7 +15,7 @@ class AlarmProperty{
     @JsonProperty var isSet: Boolean
 
     // Jsonの例外対策
-    constructor(): this("", 0, 0, false, 0, DayOfWeek(), false)
+    constructor(): this("", 0, 0, false, 0, DayOfWeek(), true)
 
     constructor(id: String,
                 title: String,

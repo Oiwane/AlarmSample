@@ -43,7 +43,11 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
      * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
     fun resetAlarm(property: AlarmProperty) {
-        stopAlarm(property.id)
+        try {
+            stopAlarm(property.id)
+        } catch (e: InvalidAlarmOperationException) {
+            Logger.write(LogType.INFO, "unset alarm")
+        }
         setUpAlarm(property)
     }
 

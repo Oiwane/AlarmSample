@@ -13,8 +13,10 @@ class AlarmList: ArrayList<AlarmProperty>() {
 
     fun remove(id: String): Int? {
         for (property in this) {
-            if (property.id == id)
+            if (property.id == id) {
+                this.remove(property)
                 return indexOf(property)
+            }
         }
         return null
     }

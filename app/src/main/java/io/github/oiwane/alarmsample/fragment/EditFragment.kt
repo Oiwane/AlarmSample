@@ -52,8 +52,9 @@ class EditFragment : Fragment() {
 
         alarmViewModel = ViewModelProvider(requireActivity(), AlarmViewModel.Factory(requireContext())).get(AlarmViewModel::class.java)
 
-        if (initComponents(view)) {
-            findNavController().popBackStack()
+        if (!initComponents(view)) {
+            if (!findNavController().popBackStack())
+                requireActivity().finish()
             return
         }
         initListeners()
@@ -83,7 +84,7 @@ class EditFragment : Fragment() {
         // 編集時の処理
         try {
             propertyId = requireArguments().getString(Constants.EDITED_PROPERTY_ID)
-            if (propertyId.isNullOrEmpty()) {
+            if (!propertyId.isNullOrEmpty()) {
                 val property = alarmViewModel.alarmList.value!!.findById(propertyId!!) ?: return false
 
                 initValueOfComponents(property)
