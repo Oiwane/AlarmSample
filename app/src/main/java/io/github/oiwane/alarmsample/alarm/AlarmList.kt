@@ -1,4 +1,4 @@
-package io.github.oiwane.alarmsample.data
+package io.github.oiwane.alarmsample.alarm
 
 class AlarmList: ArrayList<AlarmProperty>() {
     fun set(newProperty: AlarmProperty): Boolean {

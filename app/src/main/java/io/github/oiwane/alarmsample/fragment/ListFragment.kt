@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.adapter.ListViewAdapter
+import io.github.oiwane.alarmsample.widget.listView.ListViewAdapter
 import io.github.oiwane.alarmsample.listener.AlarmListViewOnItemLongClickListener
 import io.github.oiwane.alarmsample.viewModel.AlarmViewModel
 

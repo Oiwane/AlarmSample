@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.navigation.NavController
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.alarm.AlarmList
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.util.Constants
 

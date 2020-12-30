@@ -7,7 +7,7 @@ import android.widget.PopupMenu
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.adapter.ListViewAdapter
+import io.github.oiwane.alarmsample.widget.listView.ListViewAdapter
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.exception.InvalidAlarmOperationException
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
@@ -28,12 +28,12 @@ class PopupMenuOnMenuItemClickListener(
             return true
         }
         if (ListViewUpdateManager.update(item.title, context, alarmList, alarmList[index].id, navController)) {
-            try {
-                AlarmConfigurator(activity, context).resetAllAlarm(alarmList)
-                parent.adapter = ListViewAdapter(activity, context, alarmList)
-            } catch (e : InvalidAlarmOperationException) {
-                ErrorMessageToast(context).showErrorMessage(R.string.error_failed_update_alarm)
-            }
+//            try {
+//                AlarmConfigurator(activity, context).resetAllAlarm(alarmList)
+//                parent.adapter = ListViewAdapter(activity, context, alarmList)
+//            } catch (e : InvalidAlarmOperationException) {
+//                ErrorMessageToast(context).showErrorMessage(R.string.error_failed_update_alarm)
+//            }
         }
         return true
     }

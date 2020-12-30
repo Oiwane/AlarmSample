@@ -1,4 +1,4 @@
-package io.github.oiwane.alarmsample.data
+package io.github.oiwane.alarmsample.util
 
 class LimitedMap(private val max: Int): HashMap<String, Int>() {
 

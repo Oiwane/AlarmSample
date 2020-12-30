@@ -5,7 +5,7 @@ import android.content.Context
 import android.widget.CompoundButton
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
-import io.github.oiwane.alarmsample.data.AlarmProperty
+import io.github.oiwane.alarmsample.alarm.AlarmProperty
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 

@@ -3,7 +3,7 @@ package io.github.oiwane.alarmsample.listener
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
-import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.alarm.AlarmList
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 import io.github.oiwane.alarmsample.util.Constants

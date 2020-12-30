@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
-import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.alarm.AlarmList
 
 class AlarmViewModel(context: Context): ViewModel() {
     class Factory(

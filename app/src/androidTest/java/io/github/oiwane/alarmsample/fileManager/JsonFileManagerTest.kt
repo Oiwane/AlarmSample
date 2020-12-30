@@ -4,9 +4,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.github.oiwane.alarmsample.data.AlarmList
-import io.github.oiwane.alarmsample.data.AlarmProperty
-import io.github.oiwane.alarmsample.data.DayOfWeek
+import io.github.oiwane.alarmsample.alarm.AlarmList
+import io.github.oiwane.alarmsample.alarm.AlarmProperty
+import io.github.oiwane.alarmsample.alarm.DayOfWeek
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test

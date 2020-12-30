@@ -1,4 +1,4 @@
-package io.github.oiwane.alarmsample.adapter
+package io.github.oiwane.alarmsample.widget.listView
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,7 +11,7 @@ import android.widget.TextView
 import android.widget.ToggleButton
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
-import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.alarm.AlarmList
 import io.github.oiwane.alarmsample.listener.AlarmSettingToggleButtonListener
 
 class ListViewAdapter(

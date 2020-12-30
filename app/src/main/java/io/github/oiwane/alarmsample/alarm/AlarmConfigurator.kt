@@ -9,9 +9,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.data.AlarmList
-import io.github.oiwane.alarmsample.data.AlarmProperty
-import io.github.oiwane.alarmsample.data.LimitedMap
+import io.github.oiwane.alarmsample.util.LimitedMap
 import io.github.oiwane.alarmsample.exception.InvalidAlarmOperationException
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.log.LogType

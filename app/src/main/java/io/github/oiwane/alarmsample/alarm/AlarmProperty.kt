@@ -1,4 +1,4 @@
-package io.github.oiwane.alarmsample.data
+package io.github.oiwane.alarmsample.alarm
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
