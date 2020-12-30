@@ -18,11 +18,11 @@ class AlarmSettingToggleButtonListener(
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         try {
             if (isChecked) {
-                configurator.stopAlarm(alarmProperty.id)
-                buttonView.foreground = context.getDrawable(R.drawable.ic_alert_during_stopping)
-            } else {
                 configurator.setUpAlarm(alarmProperty)
                 buttonView.foreground = context.getDrawable(R.drawable.ic_alert_during_setting)
+            } else {
+                configurator.stopAlarm(alarmProperty.id)
+                buttonView.foreground = context.getDrawable(R.drawable.ic_alert_during_stopping)
             }
         } catch (e: Exception) {
             Logger.write(LogType.ERROR, e.message.toString())
