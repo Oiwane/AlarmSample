@@ -30,6 +30,7 @@
     <string name="error_failed_write_file">ファイルの書き込みに失敗しました</string>
     <string name="error_failed_not_found_file">アラームが登録されていません</string>
     <string name="error_failed_remove_alarm">アラームを削除できませんでした</string>
+    <string name="error_failed_update_alarm">アラームを更新ができませんでした</string>
 
     <string name="message_not_found_file">not found file</string>
     <string name="message_convert_failed">convert failed</string>
