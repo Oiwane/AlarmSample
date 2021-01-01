@@ -1,5 +1,6 @@
-package io.github.oiwane.alarmsample.listener
+package io.github.oiwane.alarmsample.widget.listener
 
+import android.os.PowerManager
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
@@ -14,23 +15,31 @@ import io.github.oiwane.alarmsample.util.Constants
  */
 class StopButtonOnClickListener(
     private val activity: AppCompatActivity,
-    private val alarmList: AlarmList
+    private val alarmList: AlarmList,
+    private val wakeLock: PowerManager.WakeLock
 ): View.OnClickListener {
     override fun onClick(v: View?) {
         try {
-            val requestCode = activity.intent.getStringExtra(Constants.ALARM_REQUEST_CODE) ?: throw InvalidAlarmOperationException()
-            val property = alarmList.find { requestCode == it.hashCode().toString() } ?: throw InvalidAlarmOperationException()
+            val requestCode = activity.intent.getStringExtra(Constants.ALARM_REQUEST_CODE)
+                ?: throw InvalidAlarmOperationException()
+            val property = alarmList.find {
+                requestCode == AlarmConfigurator.requestCodeMap[it.id].toString()
+            } ?: throw InvalidAlarmOperationException()
+
             if (property.dow.isSpecified())
                 AlarmConfigurator(activity, activity).resetAlarm(property)
             else
                 AlarmConfigurator(activity, activity).stopAlarm(property.id)
-            activity.finish()
         } catch (e: IllegalStateException) {
             Logger.write(LogType.INFO, "bundle don't have key '${Constants.ALARM_REQUEST_CODE}'")
         } catch (e: NumberFormatException) {
             Logger.write(LogType.ERROR, "failed parse string")
         } catch (e: InvalidAlarmOperationException) {
             Logger.write(LogType.ERROR, e.message.toString())
+        } finally {
+            if (wakeLock.isHeld)
+                wakeLock.release()
+            activity.finish()
         }
     }
 }

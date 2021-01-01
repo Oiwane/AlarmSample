@@ -12,7 +12,7 @@ import android.widget.ToggleButton
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
 import io.github.oiwane.alarmsample.alarm.AlarmList
-import io.github.oiwane.alarmsample.listener.AlarmSettingToggleButtonListener
+import io.github.oiwane.alarmsample.widget.listener.AlarmSettingToggleButtonListener
 
 class ListViewAdapter(
     private val activity: Activity, private val context: Context, private val alarmList: AlarmList

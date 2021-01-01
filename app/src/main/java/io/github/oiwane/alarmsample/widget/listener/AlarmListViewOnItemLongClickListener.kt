@@ -1,5 +1,6 @@
-package io.github.oiwane.alarmsample.listener
+package io.github.oiwane.alarmsample.widget.listener
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.widget.AdapterView
@@ -11,6 +12,7 @@ import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 
 class AlarmListViewOnItemLongClickListener(
+    private val activity: Activity,
     private val context: Context,
     private val navController: NavController?
 ): AdapterView.OnItemLongClickListener{
@@ -23,7 +25,7 @@ class AlarmListViewOnItemLongClickListener(
         val popup = PopupMenu(context, view!!)
         popup.menuInflater.inflate(R.menu.popup_menut, popup.menu)
         popup.setOnMenuItemClickListener(
-            PopupMenuOnMenuItemClickListener(context, position, navController))
+            PopupMenuOnMenuItemClickListener(activity, context, parent, position, navController))
         popup.show()
         return true
     }

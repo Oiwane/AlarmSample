@@ -1,4 +1,4 @@
-package io.github.oiwane.alarmsample.listener
+package io.github.oiwane.alarmsample.widget.listener
 
 import android.annotation.SuppressLint
 import android.content.Context
