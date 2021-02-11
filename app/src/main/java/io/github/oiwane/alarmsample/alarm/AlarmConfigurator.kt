@@ -1,7 +1,6 @@
 package io.github.oiwane.alarmsample.alarm
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -20,7 +19,7 @@ import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AlarmConfigurator(private val activity: Activity, context: Context) {
+class AlarmConfigurator(private val context: Context) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val intent = Intent(context, AlarmBroadcastReceiver::class.java)
@@ -32,7 +31,7 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
      * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
     fun resetAllAlarm(alarmList: AlarmList) {
-        alarmList.forEach { resetAlarm(it) }
+        alarmList.filter { it.isSet }.forEach { resetAlarm(it) }
     }
 
     /**
@@ -42,7 +41,7 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
      */
     fun resetAlarm(property: AlarmProperty) {
         try {
-            stopAlarm(property.id)
+            stopAlarm(property)
         } catch (e: InvalidAlarmOperationException) {
             Logger.write(LogType.INFO, "unset alarm")
         }
@@ -64,7 +63,7 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
 
         intent.data = Uri.parse(requestCode.toString())
         val pendingIntent = PendingIntent.getBroadcast(
-            activity, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
+            context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             alarmManager.setAlarmClock(
@@ -74,22 +73,25 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
         else
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        property.isSet = true
         Logger.write(LogType.INFO, "set alarm")
     }
 
     /**
      * アラームを停止する
-     * @param propertyId アラーム情報のID
+     * @param property アラーム情報
      * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
-    fun stopAlarm(propertyId: String) {
-        Logger.write(LogType.INFO, "start stopAlarm : $propertyId")
-        val requestCode = requestCodeMap[propertyId]?: throw InvalidAlarmOperationException()
+    fun stopAlarm(property: AlarmProperty) {
+        Logger.write(LogType.INFO, "start stopAlarm : ${property.id}")
+        requestCodeMap.removeUnusedValue(createPropertyList(context))
+        val requestCode = requestCodeMap[property.id]?: throw InvalidAlarmOperationException()
         intent.data = Uri.parse(requestCode.toString())
         val pendingIntent = PendingIntent.getBroadcast(
-            activity, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
+            context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
         alarmManager.cancel(pendingIntent)
+        property.isSet = false
         Logger.write(LogType.INFO, "end stopAlarm")
     }
 
@@ -99,7 +101,7 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
      * @throws InvalidAlarmOperationException アラーム関連の無効な操作をした際に発生
      */
     fun snooze(property: AlarmProperty) {
-        stopAlarm(property.id)
+        stopAlarm(property)
         val snoozeProperty = AlarmProperty(
             property.id,
             property.title,
@@ -114,20 +116,21 @@ class AlarmConfigurator(private val activity: Activity, context: Context) {
     }
 
     companion object {
-        val requestCodeMap = LimitedMap(10)
+        val requestCodeMap = LimitedMap(Constants.MAP_MAX_SIZE)
 
         /**
          * Jsonファイルのアラーム情報をリストにする
          * @param context コンテキスト
          * @return アラーム情報リスト
          */
-        fun createPropertyList(context: Context): AlarmList?{
+        fun createPropertyList(context: Context): AlarmList{
             return try {
-                val propertyList = JsonFileManager(context).load()
+                var propertyList = JsonFileManager(context).load()
 
                 // ファイルの読み込みができなかった場合
                 if (propertyList == null) {
                     ErrorMessageToast(context).showErrorMessage(R.string.error_failed_load_file)
+                    propertyList = AlarmList()
                 }
                 propertyList
             } catch (e: FileNotFoundException) {

@@ -34,8 +34,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
         Logger.write(LogType.INFO, "requestCode : $requestCode")
         if (requestCode.isNullOrBlank()) {
             val alarmList = AlarmConfigurator.createPropertyList(context)
-            if (alarmList != null)
-                AlarmConfigurator(context as Activity, context).resetAllAlarm(alarmList)
+            AlarmConfigurator(context).resetAllAlarm(alarmList)
             return
         }
 

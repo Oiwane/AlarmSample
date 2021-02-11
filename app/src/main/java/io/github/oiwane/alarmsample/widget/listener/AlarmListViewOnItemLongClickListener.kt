@@ -1,18 +1,18 @@
 package io.github.oiwane.alarmsample.widget.listener
 
-import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.PopupMenu
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import io.github.oiwane.alarmsample.R
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 
 class AlarmListViewOnItemLongClickListener(
-    private val activity: Activity,
+    private val activity: FragmentActivity,
     private val context: Context,
     private val navController: NavController?
 ): AdapterView.OnItemLongClickListener{

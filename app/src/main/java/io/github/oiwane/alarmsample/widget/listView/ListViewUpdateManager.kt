@@ -49,7 +49,7 @@ class ListViewUpdateManager {
          * アラームを削除する
          */
         private fun remove(alarmList: AlarmList, propertyId: String, context: Context): Boolean {
-            val property = alarmList.findById(propertyId) ?: return false
+            val property = alarmList.find { it.id == propertyId } ?: return false
             val index = alarmList.remove(propertyId)?: return false
             if (!JsonFileManager(context).write(alarmList)) {
                 alarmList.add(index, property)

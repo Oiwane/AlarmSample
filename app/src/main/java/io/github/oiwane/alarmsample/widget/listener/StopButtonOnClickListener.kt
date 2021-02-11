@@ -19,17 +19,20 @@ class StopButtonOnClickListener(
     private val wakeLock: PowerManager.WakeLock
 ): View.OnClickListener {
     override fun onClick(v: View?) {
+        Logger.write(LogType.INFO, "start listener")
         try {
             val requestCode = activity.intent.getStringExtra(Constants.ALARM_REQUEST_CODE)
                 ?: throw InvalidAlarmOperationException()
+            Logger.write(LogType.INFO, "requestCode : $requestCode")
             val property = alarmList.find {
                 requestCode == AlarmConfigurator.requestCodeMap[it.id].toString()
             } ?: throw InvalidAlarmOperationException()
+            Logger.write(LogType.INFO, "property : $property")
 
             if (property.dow.isSpecified())
-                AlarmConfigurator(activity, activity).resetAlarm(property)
+                AlarmConfigurator(activity).resetAlarm(property)
             else
-                AlarmConfigurator(activity, activity).stopAlarm(property.id)
+                AlarmConfigurator(activity).stopAlarm(property)
         } catch (e: IllegalStateException) {
             Logger.write(LogType.INFO, "bundle don't have key '${Constants.ALARM_REQUEST_CODE}'")
         } catch (e: NumberFormatException) {
@@ -40,6 +43,7 @@ class StopButtonOnClickListener(
             if (wakeLock.isHeld)
                 wakeLock.release()
             activity.finish()
+            Logger.write(LogType.INFO, "end listener")
         }
     }
 }

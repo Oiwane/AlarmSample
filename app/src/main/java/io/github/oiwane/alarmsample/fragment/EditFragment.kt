@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +20,7 @@ import io.github.oiwane.alarmsample.log.Logger
 import io.github.oiwane.alarmsample.util.Constants
 import io.github.oiwane.alarmsample.message.ErrorMessageToast
 import io.github.oiwane.alarmsample.viewModel.AlarmViewModel
-import io.github.oiwane.alarmsample.widget.spinner.SpinnerContentInitializer
+import io.github.oiwane.alarmsample.widget.spinner.MySpinner
 import io.github.oiwane.alarmsample.widget.toggleButton.DOWToggleButtonGroup
 
 /**
@@ -29,10 +28,10 @@ import io.github.oiwane.alarmsample.widget.toggleButton.DOWToggleButtonGroup
  */
 class EditFragment : Fragment() {
     private lateinit var alarmEditText: EditText
-    private lateinit var hourSpinner: Spinner
-    private lateinit var minuteSpinner: Spinner
+    private lateinit var hourSpinner: MySpinner
+    private lateinit var minuteSpinner: MySpinner
     private lateinit var snoozeSwitchCompat: SwitchCompat
-    private lateinit var snoozeSpinner: Spinner
+    private lateinit var snoozeSpinner: MySpinner
     private lateinit var dowToggleButtonGroup: DOWToggleButtonGroup
     private lateinit var registerButton: Button
     private lateinit var cancelButton: Button
@@ -75,10 +74,9 @@ class EditFragment : Fragment() {
         registerButton = view.findViewById(R.id.registerButton)
         cancelButton = view.findViewById(R.id.cancelButton)
 
-        val initializer = SpinnerContentInitializer(requireContext())
-        initializer.initSpinnerContent(hourSpinner, 0..23)
-        initializer.initSpinnerContent(minuteSpinner, 0..59)
-        initializer.initSpinnerContent(snoozeSpinner, 5..20, 5, "%d分")
+        hourSpinner.initContent(0..23)
+        minuteSpinner.initContent(0..59)
+        snoozeSpinner.initContent(5..20, 5, "%d分")
 
         snoozeSpinner.isEnabled = false
 
@@ -86,7 +84,7 @@ class EditFragment : Fragment() {
         try {
             propertyId = requireArguments().getString(Constants.EDITED_PROPERTY_ID)
             if (!propertyId.isNullOrEmpty()) {
-                val property = alarmViewModel.alarmList.value!!.findById(propertyId!!) ?: return false
+                val property = alarmViewModel.alarmList.value!!.find { it.id == propertyId!! } ?: return false
 
                 initValueOfComponents(property)
             }
@@ -124,7 +122,7 @@ class EditFragment : Fragment() {
             val activity = requireActivity()
             val context = requireContext()
             try {
-                AlarmConfigurator(activity, context).resetAllAlarm(alarmList)
+                AlarmConfigurator(context).resetAllAlarm(alarmList)
             } catch (e : InvalidAlarmOperationException) {
                 ErrorMessageToast(context).showErrorMessage(R.string.error_failed_update_alarm)
             } finally {
@@ -142,15 +140,14 @@ class EditFragment : Fragment() {
         return View.OnClickListener {
             val activity = requireActivity()
             val context = requireContext()
-            val toast = ErrorMessageToast(context)
 
             // アラーム名を入力していなかった場合
             if (alarmEditText.text.toString() == "") {
-                toast.showErrorMessage(R.string.error_edit_text_empty)
+                ErrorMessageToast(context).showErrorMessage(R.string.error_edit_text_empty)
                 return@OnClickListener
             }
 
-            val propertyList = alarmViewModel.alarmList.value?: return@OnClickListener
+            val propertyList = alarmViewModel.alarmList.value!!
             val property = createPropertyFromInput()
             if (propertyId.isNullOrEmpty())
                 propertyList.add(property)
@@ -159,12 +156,15 @@ class EditFragment : Fragment() {
 
             // ファイルの書き込みができなかった場合
             if (!JsonFileManager(context).write(propertyList)) {
-                toast.showErrorMessage(R.string.error_failed_write_file)
+                ErrorMessageToast(context).showErrorMessage(R.string.error_failed_write_file)
                 propertyList.remove(property)
                 return@OnClickListener
             }
 
-            AlarmConfigurator(activity, requireContext()).setUpAlarm(property)
+            if (propertyId.isNullOrEmpty())
+                AlarmConfigurator(context).setUpAlarm(property)
+            else
+                AlarmConfigurator(context).resetAlarm(property)
 
             if (!findNavController().popBackStack())
                 activity.finish()
@@ -177,13 +177,14 @@ class EditFragment : Fragment() {
      */
     private fun createPropertyFromInput(): AlarmProperty {
         return AlarmProperty(
-            alarmEditText.text.toString(),
-            hourSpinner.selectedItemPosition,
-            minuteSpinner.selectedItemPosition,
-            snoozeSwitchCompat.isChecked,
-            snoozeSpinner.selectedItemPosition,
-            dowToggleButtonGroup.getDayOfWeek(),
-            true
-        )
+                propertyId,
+                alarmEditText.text.toString(),
+                hourSpinner.selectedItemPosition,
+                minuteSpinner.selectedItemPosition,
+                snoozeSwitchCompat.isChecked,
+                snoozeSpinner.selectedItemPosition,
+                dowToggleButtonGroup.getDayOfWeek(),
+                true
+            )
     }
 }

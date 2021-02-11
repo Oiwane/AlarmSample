@@ -23,7 +23,7 @@ class SnoozeButtonOnClickListener(
         try {
             val requestCodeStr = activity.intent.getStringExtra(Constants.ALARM_REQUEST_CODE) ?: return
             val requestCode = Integer.parseInt(requestCodeStr)
-            AlarmConfigurator(activity, activity).snooze(alarmList[requestCode])
+            AlarmConfigurator(activity).snooze(alarmList[requestCode])
         } catch (e: IllegalStateException) {
             Logger.write(LogType.INFO, "bundle don't have key '${Constants.ALARM_REQUEST_CODE}'")
             ErrorMessageToast(activity).showErrorMessage(R.string.error_failed_snooze_alarm)
