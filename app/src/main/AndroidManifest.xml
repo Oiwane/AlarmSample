@@ -3,6 +3,8 @@
     package="io.github.oiwane.alarmsample">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -27,10 +29,20 @@
             android:taskAffinity=""
             android:excludeFromRecents="true"
             android:label="@string/app_name"/>
-        <receiver android:name=".alarm.AlarmBroadcastReceiver"  android:exported="true">
+        <receiver android:name=".alarm.AlarmBroadcastReceiver"
+            android:exported="false"
+            android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".broadcast.RebootBroadcastReceiver"
+            android:directBootAware="true"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
     </application>

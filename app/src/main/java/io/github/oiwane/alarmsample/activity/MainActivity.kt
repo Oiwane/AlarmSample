@@ -1,12 +1,18 @@
 package io.github.oiwane.alarmsample.activity
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import io.github.oiwane.alarmsample.R
+import io.github.oiwane.alarmsample.alarm.AlarmConfigurator
+import io.github.oiwane.alarmsample.broadcast.ScreenStatusBroadcastReceiver
+import io.github.oiwane.alarmsample.viewModel.AlarmViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,9 +21,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+        val receiver = ScreenStatusBroadcastReceiver()
+        registerReceiver(receiver, IntentFilter(Intent.ACTION_SCREEN_ON))
+        registerReceiver(receiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
+
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             findNavController(R.id.nav_host_fragment).navigate(R.id.EditFragment)
         }
+
+        val factory = AlarmViewModel.Factory(this)
+        val viewModel = ViewModelProvider(this, factory).get(AlarmViewModel::class.java)
+        AlarmConfigurator(this).resetAllAlarm(viewModel.alarmList.value!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

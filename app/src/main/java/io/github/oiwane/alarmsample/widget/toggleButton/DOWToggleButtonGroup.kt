@@ -3,7 +3,7 @@ package io.github.oiwane.alarmsample.widget.toggleButton
 import android.view.View
 import android.widget.ToggleButton
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.data.DayOfWeek
+import io.github.oiwane.alarmsample.alarm.DayOfWeek
 
 /**
  * 曜日のトグルボタンを管理するクラス

@@ -14,7 +14,7 @@
         android:layout_marginBottom="10dp"
         android:foreground="@drawable/ic_alert_during_stopping">
 
-        <ToggleButton
+        <io.github.oiwane.alarmsample.widget.toggleButton.AlarmSettingToggleButton
             android:id="@+id/alarmSettingToggleButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

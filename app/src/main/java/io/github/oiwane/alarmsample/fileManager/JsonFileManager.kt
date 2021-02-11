@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.alarm.AlarmList
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 import java.io.File

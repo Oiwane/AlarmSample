@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.navigation.NavController
 import io.github.oiwane.alarmsample.R
-import io.github.oiwane.alarmsample.data.AlarmList
+import io.github.oiwane.alarmsample.alarm.AlarmList
 import io.github.oiwane.alarmsample.fileManager.JsonFileManager
 import io.github.oiwane.alarmsample.util.Constants
 
@@ -49,7 +49,7 @@ class ListViewUpdateManager {
          * アラームを削除する
          */
         private fun remove(alarmList: AlarmList, propertyId: String, context: Context): Boolean {
-            val property = alarmList.findById(propertyId) ?: return false
+            val property = alarmList.find { it.id == propertyId } ?: return false
             val index = alarmList.remove(propertyId)?: return false
             if (!JsonFileManager(context).write(alarmList)) {
                 alarmList.add(index, property)

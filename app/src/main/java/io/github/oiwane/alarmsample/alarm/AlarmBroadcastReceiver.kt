@@ -14,6 +14,7 @@ import io.github.oiwane.alarmsample.activity.StopAlarmActivity
 import io.github.oiwane.alarmsample.log.LogType
 import io.github.oiwane.alarmsample.log.Logger
 import io.github.oiwane.alarmsample.util.Constants
+import io.github.oiwane.alarmsample.util.ScreenStatus
 import java.util.*
 
 /**
@@ -25,21 +26,27 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
 
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-    override fun onReceive(context: Context, intent: Intent?) {
-        Logger.write(LogType.INFO, "start")
+    override fun onReceive(context: Context, intent: Intent) {
+        Logger.write(LogType.INFO, "receive alarm")
 
         // リクエストコードを取得
-        requestCode = intent!!.data.toString()
+        requestCode = intent.data.toString()
         Logger.write(LogType.INFO, "requestCode : $requestCode")
         if (requestCode.isNullOrBlank()) {
             val alarmList = AlarmConfigurator.createPropertyList(context)
-            if (alarmList != null)
-                AlarmConfigurator(context as Activity, context).resetAllAlarm(alarmList)
+            AlarmConfigurator(context).resetAllAlarm(alarmList)
             return
         }
 
-        // 通知の準備と送信
         val alarmIntent = createIntent(context)
+
+        // スクリーンが点いていないときの処理
+        if (!ScreenStatus.TurnOn) {
+            context.startActivity(alarmIntent)
+            return
+        }
+
+        // スクリーンが点いているときの処理
         val broadcast = setUpTransition(context, alarmIntent)
         val pendingIntent = PendingIntent.getActivity(
             context, Integer.parseInt(requestCode!!), alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT
@@ -88,7 +95,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver()
         context: Context, pendingIntent: PendingIntent?, broadcast: PendingIntent?
     ): NotificationCompat.Builder? {
         val calendar = Calendar.getInstance()
-        val time = "%02d:%02d".format(calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE))
+        val time = "%02d:%02d".format(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
         return NotificationCompat.Builder(context, Constants.CHANNEL_ID)
     //            .addAction(android.R.drawable.bottom_bar, "stop", broadcast)
             .setSmallIcon(android.R.drawable.ic_dialog_info)

@@ -1,4 +1,4 @@
-package io.github.oiwane.alarmsample.data
+package io.github.oiwane.alarmsample.alarm
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -17,7 +17,7 @@ class AlarmProperty{
     // Jsonの例外対策
     constructor(): this("", 0, 0, false, 0, DayOfWeek(), true)
 
-    constructor(id: String,
+    constructor(id: String?,
                 title: String,
                 hour: Int,
                 minute: Int,
@@ -26,7 +26,8 @@ class AlarmProperty{
                 dow: DayOfWeek,
                 isSet: Boolean
     ): this(title, hour, minute, hasSnoozed, snoozeTime, dow, isSet) {
-        this.id = id
+        if (!id.isNullOrEmpty())
+            this.id = id
     }
 
     constructor(title: String,
